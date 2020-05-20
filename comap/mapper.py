@@ -20,7 +20,7 @@ import numpy as np
 import networkx as nx
 from matplotlib import colors
 
-from comap.plot_utils import (plot_map,plot_graph_deltas, quadrant_scatter, plot_graph_perturbations)
+from comap.plot_utils import (plot_map,plot_ego_map,plot_graph_deltas, quadrant_scatter, plot_graph_perturbations)
 from comap.synth_utils import (generate_synthetic_graph)
 
 
@@ -81,6 +81,7 @@ class CoMap():
                     self.map.add_edge(edge[0],edge[1], weight=1)
         
         # relabel nodes according to mapping provided by 'node_tags'
+        #if node_tags:
         nx.set_node_attributes(self.map, name = 'node_label', values = node_tags) 
         nx.relabel_nodes(self.map, mapping=node_tags, copy=False)
 
@@ -178,9 +179,13 @@ class CoMap():
         return dfn
 
 
-    def plot_map(self):
+    def plot_map(self,layout=''):
 
-        return plot_map(self.map)
+        return plot_map(self.map, layout)
+
+    def plot_ego_map(self,n,direction='', layout=''):
+
+        return plot_ego_map(self.map, n, direction, layout)
 
     def plot_map_deltas(self):
 

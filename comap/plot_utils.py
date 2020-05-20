@@ -8,7 +8,7 @@ from matplotlib import pyplot as plt
 
 
 
-def plot_map(G):
+def plot_map(G, layout=''):
     """
     Draw map using networkX's draw functionality
 
@@ -28,7 +28,16 @@ def plot_map(G):
     weights = list( nx.get_edge_attributes(G, name='weight').values() )
     #if not pos:
     #    pos=layout
-    pos = nx.layout.shell_layout(G)
+    if layout=='circular':
+        pos = nx.layout.circular_layout(G)
+    elif layout=='spectral':
+        pos = nx.layout.spectral_layout(G)
+    elif layout=='spring':
+        pos = nx.layout.spring_layout(G)
+    elif layout=='spiral':
+        pos = nx.layout.spiral_layout(G)
+    else:
+        pos = nx.layout.shell_layout(G)
 
     node_colors = list( nx.get_node_attributes(G, name='node_color').values() )
     node_labels = list( nx.get_node_attributes(G, name='node_label').values() )
@@ -63,6 +72,40 @@ def plot_map(G):
     plt.axis('off')
 
     return
+
+def plot_ego_map(G, n, direction='', layout=''):
+    """
+    Helper function to draw the ego network of node n
+
+    Args: 
+        - G: networkx graph
+        - n: node for which ego graph is drawn
+
+    Returns:
+        - plot of the ego graph of node n
+    """
+
+    D = G.copy()
+    
+    if direction == 'incoming':
+        ego = nx.ego_graph(D.reverse(), n)
+    elif direction == 'undirected':
+        ego = nx.ego_graph(D, n, undirected=True)
+    else:
+        ego = nx.ego_graph(D, n, undirected=False)
+
+    # set node color of node n to bright red
+    attr = {n : {'node_color':'r'}}
+
+    nx.set_node_attributes(ego, attr)
+
+    # plot ego graph
+    plot_map( ego, layout)
+
+    return
+
+
+
 
 def plot_graph_deltas(deltas=[]):
     """
