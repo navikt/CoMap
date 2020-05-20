@@ -1,4 +1,4 @@
-CoMa
+CoMap
 ================
 
 **System Effects** is a research methodology to explore the 'user' or citizen 
@@ -6,7 +6,7 @@ experience of complex phenomena, drawing on soft systems, fuzzy
 cognitive mapping and graph theory, aiming to capture the varied nature 
 of the individual experience to enable better intervention design.
 
-This python package provides utilities to support graph analysis of data 
+This python package provides utilities to support graph analyses of data 
 within the framework of this methodology, such as graph relabelling, 
 graph aggregation, graph analysis tools and tools to minimize the potential leakage 
 of private information in aggregate graphs.
@@ -26,7 +26,7 @@ Hvordan bygge, teste og kjøre koden viss aktuelt.
 Spørsmål knyttet til koden eller prosjektet kan rettes mot:
 
 * Robindra Prabhu, robindra.prabhu@nav.no
-* Eller en annen måte for omverden å kontakte teamet på
+
 
 ## For NAV-ansatte
 
