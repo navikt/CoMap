@@ -124,8 +124,9 @@ def generate_synthetic_graph(G, noise_scale=0.2, smear_func='laplace', top_k=0.5
 
 
     #pdf = lambda x,loc,scale : np.exp(-abs(x-loc)/scale)/(2.*scale)
-    locs = []
-    devs = []
+    #locs = []
+    #devs = []
+    deg1_noise = [] # array to hold degree-1 edge perturbations
     #D = create_distance_matrix(A)
 
     #np.fill_diagonal(A,0)
@@ -148,12 +149,14 @@ def generate_synthetic_graph(G, noise_scale=0.2, smear_func='laplace', top_k=0.5
             dev = np.random.choice(np.arange(1,5,1),p=s)
 
             # perturb edge weights 
-            A[i,:] = A[i,:]*int((dev+(5*noise_scale))) #sjekk denne
-            A[:,i] = A[:,i]*int((dev+(5*noise_scale))) # -----||----
+            edge_perturb = int( dev +(5*noise_scale) )
+            A[i,:] = A[i,:] * edge_perturb #int((dev+(5*noise_scale))) #sjekk denne
+            A[:,i] = A[:,i] * edge_perturb #int((dev+(5*noise_scale))) # -----||----
+            deg1_noise.append( edge_perturb )
         
 
     # apply random noise to non-zero entries in adjacency matrix        
-    A_noised, noise = _noisy_matrix(A, s=noise_scale, smear_func=smear_func)
+    A_noised, degN_noise = _noisy_matrix(A, s=noise_scale, smear_func=smear_func)
 
     # reduce the noised adjacency matrix by SVD and reconstruct an approximation based in k eigenvectors
     A_recon = _svd_approximations(A_noised, k=top_k)
@@ -167,4 +170,4 @@ def generate_synthetic_graph(G, noise_scale=0.2, smear_func='laplace', top_k=0.5
     relabelmap = {list(synmap.nodes())[i]:list(G.nodes())[i] for i in range(len(synmap.nodes()))}
     synmap = nx.relabel_nodes(synmap, relabelmap)
 
-    return synmap, a_diff, noise 
+    return synmap, a_diff, degN_noise, deg1_noise 

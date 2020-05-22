@@ -247,36 +247,37 @@ def quadrant_scatter(df
     return
 
 
-def plot_graph_perturbations(M, noise):
-	
-	"""
+def plot_graph_perturbations(M, degN_noise, deg1_noise):
+    """
     Helper function to draw perturbations to adjacency matrix during synthesis
 
-    Args: 
-    - M: numpy matrix of where each element represents a perturbation to the corresponding edge in the original adjacency matrix
-    - noise: numpy array of noise added to adjacency matrix 
+    Args:
+        - M: numpy matrix where each element represents a perturbation to the corresponding edge in the original adjacency matrix
+        - degN_noise: a list of noise added to adjancy matrix
+        - deg1_noise: a list of noise added to degree-1 edges
 
-    Returns: 
-    - plot of perturbations to adjacency matrix
+    Returns:
+        - plot of perturbations to adjacency matrix
     """
-	
-	# plot with various axes scales
-	plt.figure(figsize=(10,10))
-	
-	# total perturbations to adjacency matrix
-	m_pert= pd.DataFrame(M)
-	ax1 = plt.subplot(221)
-	ax1 = sns.heatmap(m_pert, mask = (m_pert==0.), linewidth=0.5)
-	plt.title('Non-zero perturbations to graph adjacency matrix')
-	
-	# noise smearing
-	ax2 = plt.subplot(222)
-	ax2.hist(noise)
-	plt.title('Noise smearing')
-	
-	plt.show()
-	
-	return
 
+    plt.figure(figsize=(15,5))
 
+    # Total pertubations to adjaceny matrix
+    m_pert = pd.DataFrame(M)
+    ax1 = plt.subplot(131)
+    ax1 = sns.heatmap(m_pert, mask = (m_pert==0.), linewidth=.5)
+    plt.title('Non-zero perturbations to graph adjacency matrix')
+    
+    # Noise smearing on degree N>1 edges
+    ax2 = plt.subplot(132)
+    ax2.hist(degN_noise)
+    plt.title('Degree N>1 noise smearing')
 
+    # Noise smearing on degree N=1 edges
+    ax3 = plt.subplot(133)
+    ax3.hist(deg1_noise)
+    plt.title('Degree N=1 noise smearing')
+    
+    plt.show()
+
+    return

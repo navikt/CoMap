@@ -202,11 +202,11 @@ class CoMap():
 
         S = CoMap( name=self.name + '_synth' )
         # create synthetic graph object
-        S.map, A_diff, noise = generate_synthetic_graph(self.map 
-                                         , noise_scale = noise_scale
-                                         , smear_func = smear_func
-                                         , top_k = top_k
-                                         )
+        S.map, A_diff, degN_noise, deg1_noise = generate_synthetic_graph(self.map 
+                                                                        , noise_scale = noise_scale
+                                                                        , smear_func = smear_func
+                                                                        , top_k = top_k
+                                                                        )
 
         # copy node attributes and assign to synthetic map
         S.node_labels = self.node_labels
@@ -217,6 +217,6 @@ class CoMap():
 
         # plot graph perturbations
         if plot:
-            plot_graph_perturbations(A_diff, noise)
+            plot_graph_perturbations(A_diff, degN_noise, deg1_noise)
     
-        return S, A_diff, noise
+        return S, A_diff, degN_noise, deg1_noise
