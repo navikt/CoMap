@@ -147,7 +147,7 @@ def quadrant_scatter(df
                     , y='In_degree_wg'
                     , z='Pagerank'
                     , skip = None
-                    , prefix = None
+                    , prefix = 'Rank of'
                     , divide_canvas = True
                     , annotate = True
                     ):
@@ -156,12 +156,14 @@ def quadrant_scatter(df
     Draw a scatter plot of graph nodes along node metrics.
     
     ------
-    Params: 
-        * df     - pd.DataFrame where index corresponds to node label and column are metrics
-        * x,y,z  - columns to plot on x, y and z-axes, respectively
-        * skip   - (optional) list of node labels that will not be included in scatter plot
-        * prefix - (optional) prefix to axis labels. Node labels are used as axis labels. 
+    Args: 
+        - df     - pd.DataFrame where index corresponds to node label and column are metrics
+        - x,y,z  - columns to plot on x, y and z-axes, respectively
+        - skip   - (optional) list of node labels that will not be included in scatter plot
+        - prefix - (optional) prefix to axis labels. Node labels are used as axis labels. 
 
+    Returns:
+        - scatter plot ("bubble plot") of graph nodes along desired node metrics
     """
 
     def _compute_scatter_size(min_new=1, max_new=50):
@@ -280,4 +282,74 @@ def plot_graph_perturbations(M, degN_noise, deg1_noise):
     
     plt.show()
 
+    return
+
+
+def plot_comparative_importance(G_a, G_b, var='Eigenvector_centrality', col_a='orange', col_b='skyblue'):
+    
+    """
+    Returns a lollipop plot of the normed difference between graph G_a and graph G_b in a user provided node property.
+    
+    Args:
+        - G_a : (CoMap) graph
+        - G_b : (CoMap) graph
+        - node_prpty : (str) node property (default: 'Eigenvector_centrality')
+    
+    Returns:
+        - a lollipop graph
+    
+    """
+    
+    
+    # get map properties
+    df_A = G_a.map_properties( sort_by=[var] )
+    df_B = G_b.map_properties( sort_by=[var] )
+    
+    # compute normalised difference
+    df_diff = (df_A - df_B)# / df_B
+    # dropna to only get nodes present in both graphs
+    df_diff.dropna(inplace=True)
+    #  sort by var
+    df_diff.sort_values(by=var,inplace=True)
+    
+    #Create a color if the group is "B"
+    color_scheme = np.where( df_diff[var]>=0, col_a, col_b)
+    
+    # Compute range
+    plt_range=range(1, len(df_diff.index)+1)
+
+    fig,ax = plt.subplots(figsize=(1/5*len(df_diff),1/3*len(df_diff)))
+
+    # plot
+    plt.axvline(x=0,color='grey',linestyle='--') 
+    plt.hlines(y=plt_range, xmin=0, xmax=df_diff[var], color=color_scheme)
+    plt.scatter(df_diff[var], plt_range, color=color_scheme, alpha=1)
+
+    # decorations
+    plt.yticks(plt_range, df_diff.index)
+    plt.xlabel('$\Delta$ '+var)
+    plt.ylabel('Node')
+    ax.yaxis.grid(True)
+    
+
+    
+    x = -0.01 #1.5*df_diff[var].min()/2
+    y = 1.1*len(df_diff)
+    
+    bbox_props_a = dict(boxstyle="rarrow,pad=0.5", fc=col_a, ec="grey", lw=1)
+    ax.text(abs(x), y, "Viktigere i \n"+G_a.name, ha="left", va="center", rotation=0,size=10,
+            bbox=bbox_props_a)
+    
+    bbox_props_b = dict(boxstyle="larrow,pad=0.5", fc=col_b, ec="grey", lw=1)
+    ax.text(x, y, "Viktigere i \n"+G_b.name, ha="right", va="center", rotation=0,size=10,
+            bbox=bbox_props_b)
+    
+    
+    xlim = np.where( df_diff[var].max()>=abs(x), 1.2*df_diff[var].max(), 1.2*abs(x))
+    ylim = 1.1*y
+    plt.xlim(-xlim,xlim)
+    plt.ylim(0,ylim)
+
+    plt.show()
+    
     return
