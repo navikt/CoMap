@@ -17,17 +17,15 @@ Luke K. Craven (2017) System Effects: A Hybrid Methodology for Exploring the Det
 
 # Quick start
 
-Hvordan bygge, teste og kjøre koden viss aktuelt.
+Update...
 
 ---
 
 # Contact
-
-Spørsmål knyttet til koden eller prosjektet kan rettes mot:
 
 * Robindra Prabhu, robindra.prabhu@nav.no
 
 
 ## For NAV-ansatte
 
-Interne henvendelser kan sendes via Slack i kanalen #minkanal.
+Interne henvendelser kan sendes via Slack i kanalen #ai-lab.
