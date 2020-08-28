@@ -345,7 +345,7 @@ def plot_comparative_importance(G,
     plt.yticks(plt_range, df_diff.index)
     plt.xlabel('$\Delta$ '+var)
     plt.ylabel('Node')
-    ax.yaxis.grid(True)
+    ax.yaxis.grid(True, linestyle='--')
     
 
     
