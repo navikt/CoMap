@@ -285,35 +285,51 @@ def plot_graph_perturbations(M, degN_noise, deg1_noise):
     return
 
 
-def plot_comparative_importance(G_a, G_b, var='Eigenvector_centrality', col_a='orange', col_b='skyblue'):
+def plot_comparative_importance(G,  
+                                var='Eigenvector_centrality',
+                                col = ('orange','skyblue'),
+                                compare_rank=False, 
+                                excl=None
+                               ):
     
     """
-    Returns a lollipop plot of the normed difference between graph G_a and graph G_b in a user provided node property.
+    Returns a lollipop plot of the difference between graph G_a and graph G_b in a user provided node property.
     
     Args:
-        - G_a : (CoMap) graph
-        - G_b : (CoMap) graph
-        - node_prpty : (str) node property (default: 'Eigenvector_centrality')
+        - G   : (tuple), of CoMap graphs to compare (e.g. (G_a, G_b))
+        - var : (str), node property (default: 'Eigenvector_centrality')
+        - col : (tuple), string of colors for G_a and G_b (default: ('orange','skyblue'))
+        - compare_rank : (bool), optional, compare relative difference in rank of 'var' rather than difference in value (default: False)
+        - excl: (list), optional, list of strings referring to nodes to exclude from plot
     
     Returns:
         - a lollipop graph
     
     """
     
+    node_prpty = var
     
     # get map properties
-    df_A = G_a.map_properties( sort_by=[var] )
-    df_B = G_b.map_properties( sort_by=[var] )
+    df_A = G[0].map_properties( sort_by=[ node_prpty ] ).drop(excl)
+    df_B = G[1].map_properties( sort_by=[ node_prpty ] ).drop(excl)
     
+    # compute rank differences
+    if(compare_rank):
+        var = var + '_rank'
+        df_A[ var ] = df_A[ node_prpty ].rank()
+        df_B[ var ] = df_B[ node_prpty ].rank()
+        
     # compute normalised difference
     df_diff = (df_A - df_B)# / df_B
+    
     # dropna to only get nodes present in both graphs
     df_diff.dropna(inplace=True)
+    
     #  sort by var
     df_diff.sort_values(by=var,inplace=True)
     
     #Create a color if the group is "B"
-    color_scheme = np.where( df_diff[var]>=0, col_a, col_b)
+    color_scheme = np.where( df_diff[var]>=0, col[0], col[1])
     
     # Compute range
     plt_range=range(1, len(df_diff.index)+1)
@@ -333,16 +349,14 @@ def plot_comparative_importance(G_a, G_b, var='Eigenvector_centrality', col_a='o
     
 
     
-    x = -0.01 #1.5*df_diff[var].min()/2
+    x = .3 * np.where( abs(df_diff[var].min()) > df_diff[var].max(), df_diff[var].max(), abs(df_diff[var].min()) ) 
     y = 1.1*len(df_diff)
     
-    bbox_props_a = dict(boxstyle="rarrow,pad=0.5", fc=col_a, ec="grey", lw=1)
-    ax.text(abs(x), y, "Viktigere i \n"+G_a.name, ha="left", va="center", rotation=0,size=10,
-            bbox=bbox_props_a)
+    bbox_props_a = dict(boxstyle="rarrow,pad=0.7", fc=col[0], ec="grey", lw=1)
+    ax.text(x,  y, "Viktigere i \n"+G[0].name, ha="left",  va="center", rotation=0, size=11, bbox=bbox_props_a)
     
-    bbox_props_b = dict(boxstyle="larrow,pad=0.5", fc=col_b, ec="grey", lw=1)
-    ax.text(x, y, "Viktigere i \n"+G_b.name, ha="right", va="center", rotation=0,size=10,
-            bbox=bbox_props_b)
+    bbox_props_b = dict(boxstyle="larrow,pad=0.7", fc=col[1], ec="grey", lw=1)
+    ax.text(-x, y, "Viktigere i \n"+G[1].name, ha="right", va="center", rotation=0, size=11, bbox=bbox_props_b)
     
     
     xlim = np.where( df_diff[var].max()>=abs(x), 1.2*df_diff[var].max(), 1.2*abs(x))
