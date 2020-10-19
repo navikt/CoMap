@@ -290,6 +290,7 @@ def plot_comparative_importance(G,
                                 col = ('orange','skyblue'),
                                 compare_rank=False, 
                                 excl=None
+                                plot=True
                                ):
     
     """
@@ -301,6 +302,7 @@ def plot_comparative_importance(G,
         - col : (tuple), string of colors for G_a and G_b (default: ('orange','skyblue'))
         - compare_rank : (bool), optional, compare relative difference in rank of 'var' rather than difference in value (default: False)
         - excl: (list), optional, list of strings referring to nodes to exclude from plot
+        - plot: (bool), optional, plot the graph in addition to returning the axes
     
     Returns:
         - a lollipop graph
@@ -364,6 +366,7 @@ def plot_comparative_importance(G,
     plt.xlim(-xlim,xlim)
     plt.ylim(0,ylim)
 
-    plt.show()
+    if plot:
+        plt.show()
     
-    return
+    return ax
