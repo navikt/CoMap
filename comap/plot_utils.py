@@ -70,8 +70,11 @@ def plot_map(G, layout=''):
                                 )
 
     plt.axis('off')
+    #plt.legend(loc='upper right')
+    #plt.show()
+    #colorbar()
 
-    return
+    return fig
 
 def plot_ego_map(G, n, direction='', layout=''):
     """
@@ -94,15 +97,15 @@ def plot_ego_map(G, n, direction='', layout=''):
     else:
         ego = nx.ego_graph(D, n, undirected=False)
 
-    # set node color of node n to bright red
-    attr = {n : {'node_color':'r'}}
+    # set node color of node n to lightgrey
+    attr = {n : {'node_color':'lightgrey'}}
 
     nx.set_node_attributes(ego, attr)
 
     # plot ego graph
-    plot_map( ego, layout)
+    fig = plot_map( ego, layout)
 
-    return
+    return fig
 
 
 
@@ -234,19 +237,19 @@ def quadrant_scatter(df
                     , cmap='coolwarm'
                     )
      # colour bar
-    c_bar = fig.colorbar(sc)
+    c_bar = fig.colorbar(sc, pad=0.15)
     c_bar.set_label(prefix + z, rotation=270, size=25, labelpad=+30)
     c_bar.ax.tick_params(labelsize=20)
 
 
     if annotate:
         for i, txt in enumerate(df.index.values):
-            ax.annotate(txt,(X[i],Y[i]), ha='right', va='baseline', size=18, name='Courier') #weight='bold'
+            ax.annotate(txt,(X[i],Y[i]), ha='center', va='baseline', size=18, name='Courier') #weight='bold'
         
     
     fig.show()
     
-    return
+    return fig
 
 
 def plot_graph_perturbations(M, degN_noise, deg1_noise):
@@ -262,7 +265,7 @@ def plot_graph_perturbations(M, degN_noise, deg1_noise):
         - plot of perturbations to adjacency matrix
     """
 
-    plt.figure(figsize=(15,5))
+    fig = plt.figure(figsize=(15,5))
 
     # Total pertubations to adjaceny matrix
     m_pert = pd.DataFrame(M)
@@ -280,9 +283,9 @@ def plot_graph_perturbations(M, degN_noise, deg1_noise):
     ax3.hist(deg1_noise)
     plt.title('Degree N=1 noise smearing')
     
-    plt.show()
+    fig.show()
 
-    return
+    return 
 
 
 def plot_comparative_importance(G,  
@@ -344,8 +347,8 @@ def plot_comparative_importance(G,
 
     # decorations
     plt.yticks(plt_range, df_diff.index)
-    plt.xlabel('$\Delta$ '+var)
-    plt.ylabel('Node')
+    plt.xlabel('$\Delta$ '+var, fontsize=18)
+    plt.ylabel('Node', fontsize=18)
     ax.yaxis.grid(True, linestyle='--')
     
 
@@ -354,16 +357,18 @@ def plot_comparative_importance(G,
     y = 1.1*len(df_diff)
     
     bbox_props_a = dict(boxstyle="rarrow,pad=0.7", fc=col[0], ec="grey", lw=1)
-    ax.text(x,  y, "Viktigere i \n"+G[0].name, ha="left",  va="center", rotation=0, size=11, bbox=bbox_props_a)
+    ax.text(x,  y, "Viktigere i \n"+G[0].name, ha="left",  va="center", bbox=bbox_props_a, rotation=0, size=11, fontsize=12 )
     
     bbox_props_b = dict(boxstyle="larrow,pad=0.7", fc=col[1], ec="grey", lw=1)
-    ax.text(-x, y, "Viktigere i \n"+G[1].name, ha="right", va="center", rotation=0, size=11, bbox=bbox_props_b)
+    ax.text(-x, y, "Viktigere i \n"+G[1].name, ha="right", va="center", bbox=bbox_props_b, rotation=0, size=11, fontsize=12 )
     
     
     xlim = np.where( df_diff[var].max()>=abs(x), 1.2*df_diff[var].max(), 1.2*abs(x))
     ylim = 1.1*y
     plt.xlim(-xlim,xlim)
     plt.ylim(0,ylim)
+
+    fig.show()
 
     
     return fig

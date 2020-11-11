@@ -49,7 +49,7 @@ class CoMap():
         # initialise empty DiGraph() for synthetic graph
         self.synmap = nx.DiGraph()  
 
-
+    
     def set_deltas(self, deltas={}):
         """ Set graph deltas """
         self.graph_deltas = deltas
