@@ -290,7 +290,6 @@ def plot_comparative_importance(G,
                                 col = ('orange','skyblue'),
                                 compare_rank=False, 
                                 excl=None
-                                plot=True
                                ):
     
     """
@@ -366,7 +365,5 @@ def plot_comparative_importance(G,
     plt.xlim(-xlim,xlim)
     plt.ylim(0,ylim)
 
-    if plot:
-        plt.show()
     
-    return ax
+    return fig
