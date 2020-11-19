@@ -28,14 +28,19 @@ class CoMap():
     """
     Class to represent aggregated "System Effects" graph with associated properties.
     
-    Parameters: 
+    Attributes: 
     -----------
-    map: a networkX DiGraph to represent an aggregated "System Effects" graph
-    name: optional name to tag aggregated "System Effects" graph
+        map:  (networkX DiGraph) representing an aggregated "System Effects" graph
+        name: (string) optional name to tag aggregated "System Effects" graph
+        grap_deltas: (dict) holding the deltas between original and relabelled constitutents of aggregated graph
+        node_labels: (dict) mapping node numbers to labels
+        node_colors: (dict) mapping node numbers to colors
+        synmap: (network DiGraph) representing a synthetic version of map
 
     """
     
     def __init__(self, name='se_graph'):
+        """Inits CoMap class with empty attributes"""
         self.map    = nx.DiGraph()  # initialise empty DiGraph()
         self.name   = name
 
@@ -60,9 +65,14 @@ class CoMap():
     
     def aggregate_maps(self, G=[], node_tags={}):
         """
-        Takes a list of DiGraphs and aggregates common edges between nodes.
-        Input: (list) of DiGraps
-        Output: DiGraph
+        Takes a list of DiGraphs and aggregates common edges between nodes to create an aggregate graph.
+        Attach aggregate graph as an attribute to CoMap object.
+
+        Args: 
+            G: (list) of DiGraps
+            node_tags: (dict) mapping node numbers to labels, e.g {0:'A',1:'cat',2:'family',...}
+        
+        Returns: None
         """
 
         self.map = nx.DiGraph() 
@@ -81,7 +91,6 @@ class CoMap():
                     self.map.add_edge(edge[0],edge[1], weight=1)
         
         # relabel nodes according to mapping provided by 'node_tags'
-        #if node_tags:
         nx.set_node_attributes(self.map, name = 'node_label', values = node_tags) 
         nx.relabel_nodes(self.map, mapping=node_tags, copy=False)
 
@@ -98,9 +107,14 @@ class CoMap():
     
     def map_properties(self, sort_by=['Pagerank', 'Out_degree_wg']):
         """
-        returns a pd.DataFrame with a set of graph metrics computed for each node in the graph
-        This works in networkx 2.2 and potentially replaces net_stats
-        todo: check backwards compatability
+        Compute key properties of nodes in the aggregate map. 
+        Returns a sorted pandas DataFrame with graph properties.
+
+        Args:
+            sort_by: (list) of properties to sort dataframe
+        
+        Returns:
+            pandas DataFrame with a set of graph metrics computed for each node in the graph
     
         """
     
@@ -142,13 +156,14 @@ class CoMap():
 
     def get_n_highest_ranking_nodes(self, n ,metrics=[], color_cells=True):
         """
-        Extract the n nodes with the highest rank (highest value) in a given graph metric
+        Extract the n nodes with the highest rank (highest value) in a given graph metric.
 
-        Parameters:
-            * n - Number of items to retrieve (int)
-            * metrics - List of metrics to evaluate (list) 
+        Args:
+            n: (int) number of items to retrieve
+            metrics - (list) list of metrics to evaluate 
 
-        Returns: pd.DataFrame with index:rank, column:metric, cell: node
+        Returns: 
+            pandas DataFrame with index:rank, column:metric, cell: node
         """
 
         def highlight_cells(c, c_dict):
@@ -197,7 +212,19 @@ class CoMap():
 
     def generate_synthetic_graph(self, noise_scale=0.2, smear_func='laplace' , top_k=0.5, plot=True):
         """
-        Create a synthetic version of senstive CoMap-object
+        Create a synthetic version of senstive CoMap graph.
+
+        Args:
+            noise_scale: (float) noise parameter controlling the amount of noise to apply (default:0.2)
+            smear_func: (string) noise function to apply smearing (default:'laplace')
+            top_k: top k number (int) or fraction (float) of eigenvectors to use in the SVD-reconstruction of the matrix (default:0.5)
+            plot: (bool) flag to indicate if a plot of graph perturbations should be returned (default: True)
+
+        Returns:
+            S: (networkX DiGraph) synthetic graph
+            A_diff: (numpy matrix) capturing the sum perturbations performed on the input adjacency matrix
+            degN_noise: (list) of smearing perturbations to degree N>1 nodes
+            deg1_noise: (list) of smearing perturbations to degree N=1 nodes
         """
 
         S = CoMap( name=self.name + '_synth' )
