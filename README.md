@@ -1,15 +1,17 @@
 CoMap
 ================
 
+This python package provides key utilities to support graph analyses of data 
+within the framework of the System Effects methodology, such as graph relabelling, 
+graph aggregation, graph analysis tools and tools to minimize the potential leakage 
+of private information in aggregate graphs.
+
+
 **System Effects** is a research methodology to explore the 'user' or citizen 
 experience of complex phenomena. Drawing on soft systems, fuzzy
 cognitive mapping and graph theory, it aims to capture the varied nature 
 of the individual experience to enable better intervention design.
 
-This python package provides key utilities to support graph analyses of data 
-within the framework of this methodology, such as graph relabelling, 
-graph aggregation, graph analysis tools and tools to minimize the potential leakage 
-of private information in aggregate graphs.
 
 The full docs are found [here](https://navikt.github.io/comap/).
 
