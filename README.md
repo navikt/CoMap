@@ -2,11 +2,11 @@ CoMap
 ================
 
 **System Effects** is a research methodology to explore the 'user' or citizen 
-experience of complex phenomena, drawing on soft systems, fuzzy
-cognitive mapping and graph theory, aiming to capture the varied nature 
+experience of complex phenomena. Drawing on soft systems, fuzzy
+cognitive mapping and graph theory, it aims to capture the varied nature 
 of the individual experience to enable better intervention design.
 
-This python package provides utilities to support graph analyses of data 
+This python package provides key utilities to support graph analyses of data 
 within the framework of this methodology, such as graph relabelling, 
 graph aggregation, graph analysis tools and tools to minimize the potential leakage 
 of private information in aggregate graphs.
