@@ -28,14 +28,27 @@ class CoMap():
     """
     Class to represent aggregated "System Effects" graph with associated properties.
     
-    Attributes: 
-    -----------
-        map:  (networkX DiGraph) representing an aggregated "System Effects" graph
-        name: (string) optional name to tag aggregated "System Effects" graph
-        grap_deltas: (dict) holding the deltas between original and relabelled constitutents of aggregated graph
-        node_labels: (dict) mapping node numbers to labels
-        node_colors: (dict) mapping node numbers to colors
-        synmap: (network DiGraph) representing a synthetic version of map
+    Attributes
+    ----------
+    map :  networkX DiGraph 
+        Representing an aggregated "System Effects" graph.
+    name : str, optional 
+        Name to tag aggregated "System Effects" graph.
+    grap_deltas : dict 
+        Dictionary holding the deltas between original and relabelled constitutents of aggregated graph.
+    node_labels : dict 
+        Dictionary mapping node numbers to labels.
+    node_colors : dict 
+        Dictionary mapping node numbers to colors.
+    synmap : network DiGraph 
+        Grap representing a synthetic version of map.
+
+    Methods
+    -------
+    set_deltas(self, deltas={})
+        Setter function for deltas.
+    aggregate_maps(self, G=[], node_tags={})
+        Aggregate list of networkX Graphs in list G and attach to aggregate to CoMap object map.
 
     """
     
@@ -68,11 +81,17 @@ class CoMap():
         Takes a list of DiGraphs and aggregates common edges between nodes to create an aggregate graph.
         Attach aggregate graph as an attribute to CoMap object.
 
-        Args: 
-            G: (list) of DiGraps
-            node_tags: (dict) mapping node numbers to labels, e.g {0:'A',1:'cat',2:'family',...}
+        Parameters
+        ---------- 
+        G : list 
+            List of DiGraps
+        node_tags : dict 
+            Dictionary mapping node numbers to labels, e.g {0:'A',1:'cat',2:'family',...}
         
-        Returns: None
+        Returns
+        -------
+        None
+
         """
 
         self.map = nx.DiGraph() 
@@ -110,11 +129,15 @@ class CoMap():
         Compute key properties of nodes in the aggregate map. 
         Returns a sorted pandas DataFrame with graph properties.
 
-        Args:
-            sort_by: (list) of properties to sort dataframe
+        Parameters
+        ----------
+        sort_by : list 
+            List of properties to sort dataframe.
         
-        Returns:
-            pandas DataFrame with a set of graph metrics computed for each node in the graph
+        Returns
+        -------
+        pandas DataFrame 
+            Dataframe with a set of graph metrics computed for each node in the graph.
     
         """
     
@@ -158,18 +181,25 @@ class CoMap():
         """
         Extract the n nodes with the highest rank (highest value) in a given graph metric.
 
-        Args:
-            n: (int) number of items to retrieve
-            metrics - (list) list of metrics to evaluate 
+        Parameters
+        ----------
+        n : int 
+            Number of items to retrieve.
+        metrics : list
+            List of metrics to evaluate 
+        color_cells : bool
+            Color code cells (default: True)
 
-        Returns: 
-            pandas DataFrame with index:rank, column:metric, cell: node
+        Returns
+        ------- 
+        pandas DataFrame 
+            Dataframe with index:rank, column:metric, cell: node
         """
 
         def highlight_cells(c, c_dict):
             """ 
             Get node color from supplied c_dict and return a string 
-            specifying cell background color
+            specifying cell background color.
             """
             colour= c_dict.get(c)
             return 'background-color: %s' % colour
@@ -214,17 +244,27 @@ class CoMap():
         """
         Create a synthetic version of senstive CoMap graph.
 
-        Args:
-            noise_scale: (float) noise parameter controlling the amount of noise to apply (default:0.2)
-            smear_func: (string) noise function to apply smearing (default:'laplace')
-            top_k: top k number (int) or fraction (float) of eigenvectors to use in the SVD-reconstruction of the matrix (default:0.5)
-            plot: (bool) flag to indicate if a plot of graph perturbations should be returned (default: True)
+        Parameters
+        ----------
+        noise_scale: float 
+            Noise parameter controlling the amount of noise to apply (default:0.2)
+        smear_func : str 
+            Noise function to apply smearing (default:'laplace')
+        top_k : int or float 
+            Top k number (int) or fraction (float) of eigenvectors to use in the SVD-reconstruction of the matrix (default:0.5)
+        plot : bool
+            If True, plot of graph perturbations is returned (default: True)
 
-        Returns:
-            S: (networkX DiGraph) synthetic graph
-            A_diff: (numpy matrix) capturing the sum perturbations performed on the input adjacency matrix
-            degN_noise: (list) of smearing perturbations to degree N>1 nodes
-            deg1_noise: (list) of smearing perturbations to degree N=1 nodes
+        Yields
+        ------
+        S : networkX DiGraph 
+            Synthetic graph
+        A_diff : numpy.matrix 
+            Matrix capturing the sum perturbations performed on the input adjacency matrix.
+        degN_noise : list 
+            List of smearing perturbations to degree N>1 nodes.
+        deg1_noise : list 
+            List of smearing perturbations to degree N=1 nodes.
         """
 
         S = CoMap( name=self.name + '_synth' )

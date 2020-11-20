@@ -17,7 +17,7 @@ def generate_synthetic_graph(G, noise_scale=0.2, smear_func='laplace', top_k=0.5
         - top_k: top k number (int) or fraction (float) of eigenvectors to use in the SVD-reconstruction of the matrix
 
 
-    Returns:
+    Yields:
         - synmap: a (laplace)-smeared, partially randomised and singular value decomposed networkX graph S, of the same type and with similar attributes as input graph G.
         - a_diff: a numpy matrix capturing the sum perturbations performed on the input adjacency matrix (NB! Should never be released with synthetic map)
         - noise: a numpy array containing random noise additions to input adjacency matrix before SVD-reconstruction (NB! should never be released with synthetic map)

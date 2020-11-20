@@ -8,16 +8,26 @@ from matplotlib import pyplot as plt
 
 
 
-def plot_map(G, layout=''):
+def plot_map(G, layout=None):
     """
     Draw map using networkX's draw functionality
 
-    Input:
-    - G : networkx Graph
-    - node_labels : dictionary mapping node numbers to node labels
-    - node_col_schema : 'defined' if nodes should be colored by a predefined color scheme; default: coloring by node degree
-    - layout : networkx graph layout (options: 'circular_layout','random_layout','shell_layout','spring_layout','spectral_layout'); usage: "layout=nx.spring_layout(G)"
-    - pos : optional dictionary with nodes as keys and positions as values
+    Parameters
+    ----------
+    G : networkx Graph
+        A networkx Graph to plot.
+    node_labels : dict
+        Dictionary mapping node numbers to node labels.
+    layout : str 
+        Networkx graph layout (options: 'circular_layout','random_layout','spring_layout','spectral_layout'). 
+        If None is provided, 'shell_layout' is used. 
+        usage: 'layout=nx.spring_layout(G)'
+
+    Returns
+    -------
+    matplotlib figure
+        A visualisation of graph G
+
     """
 
     # set figure size
@@ -76,16 +86,27 @@ def plot_map(G, layout=''):
 
     return fig
 
-def plot_ego_map(G, n, direction='', layout=''):
+def plot_ego_map(G, n, direction=None, layout=None):
     """
-    Helper function to draw the ego network of node n
+    Helper function to draw the ego network of node n.
 
-    Args: 
-        - G: networkx graph
-        - n: node for which ego graph is drawn
+    Parameters
+    ---------- 
+    G : networkx graph
+        Networkx graph containing node n
+    n : int or str
+        Node for which ego graph is drawn
+    direction : str, optional
+        Specifies direction of ego network. Options: 'incoming' or 'undirected'.
+        If None, 'outgoing' ego-network is drawn
+    layout : str, optional
+        Specifies networkX graph visualisation layout.
+        If None, 'shell_layout' is used.
 
-    Returns:
-        - plot of the ego graph of node n
+    Returns
+    -------
+    matplotlib figure
+        Plot of the ego graph of node n.
     """
 
     D = G.copy()
@@ -114,9 +135,17 @@ def plot_graph_deltas(deltas=[]):
     """
     Helper function to plot histograms of graph deltas 
 
-    Input: dictionary of grap deltas
+    Parameters
+    ----------
+    deltas : dict 
+        Dictionary of grap deltas.
 
-    Output: plot of graph deltas
+    TODO: example of dictionary
+
+    Returns
+    ------- 
+    matplotlib figure
+        Plot of histograms of graph deltas. 
     """
 
     # plot with various axes scales
@@ -158,15 +187,31 @@ def quadrant_scatter(df
     """
     Draw a scatter plot of graph nodes along node metrics.
     
-    ------
-    Args: 
-        - df     - pd.DataFrame where index corresponds to node label and column are metrics
-        - x,y,z  - columns to plot on x, y and z-axes, respectively
-        - skip   - (optional) list of node labels that will not be included in scatter plot
-        - prefix - (optional) prefix to axis labels. Node labels are used as axis labels. 
+    Parameters
+    ---------- 
+    df : pandas DataFrame 
+        Dataframe where index corresponds to node label and column are metrics.
+    x : str
+        Variable (column) to plot on x-axis. (Default: 'Out_degree_wg')
+    y : str
+        Variable (column) to plot on y-axis. (Default: 'In_degree_wg') 
+    z : str 
+        Variable (column) to plot on z-axes. (Default: 'Pagerank')
+    skip : list, optional
+        List of node labels that will not be included in scatter plot. (Default: None)
+    prefix : str, optional 
+        Prefix to axis labels. Node labels are used as axis labels. (Default: 'Rank of')
+    divide_canvas : bool
+        Split canvas in two shaded regions. (Default: True)
+    annotate : bool
+        Annotate scatter points with node labels. (Default: True)
 
-    Returns:
-        - scatter plot ("bubble plot") of graph nodes along desired node metrics
+
+    Returns
+    -------
+    matplotlib figure
+        Scatter plot ("bubble plot") of graph nodes along desired node metrics.
+
     """
 
     def _compute_scatter_size(min_new=1, max_new=50):
@@ -256,13 +301,19 @@ def plot_graph_perturbations(M, degN_noise, deg1_noise):
     """
     Helper function to draw perturbations to adjacency matrix during synthesis
 
-    Args:
-        - M: numpy matrix where each element represents a perturbation to the corresponding edge in the original adjacency matrix
-        - degN_noise: a list of noise added to adjancy matrix
-        - deg1_noise: a list of noise added to degree-1 edges
+    Parameters
+    ----------
+    M : numpy.matrix 
+        Matrixx where each element represents a perturbation to the corresponding edge in the original adjacency matrix
+    degN_noise : list
+        List of noise added to adjancy matrix.
+    deg1_noise : list
+        List of noise added to degree-1 edges.
 
-    Returns:
-        - plot of perturbations to adjacency matrix
+    Returns
+    -------
+    matplotlib figure
+        Figure showing perturbations to 1) adjacency matrix, 2) degree N>1 nodes and 3) degree N==1 nodes
     """
 
     fig = plt.figure(figsize=(15,5))
@@ -298,17 +349,24 @@ def plot_comparative_importance(G,
     """
     Returns a lollipop plot of the difference between graph G_a and graph G_b in a user provided node property.
     
-    Args:
-        - G   : (tuple), of CoMap graphs to compare (e.g. (G_a, G_b))
-        - var : (str), node property (default: 'Eigenvector_centrality')
-        - col : (tuple), string of colors for G_a and G_b (default: ('orange','skyblue'))
-        - compare_rank : (bool), optional, compare relative difference in rank of 'var' rather than difference in value (default: False)
-        - excl: (list), optional, list of strings referring to nodes to exclude from plot
-        - plot: (bool), optional, plot the graph in addition to returning the axes
+    Parameters
+    ----------
+    G : tuple of CoMap objects 
+        Tuple of two CoMap graphs to compare (e.g. (G_a, G_b))
+    var : str 
+        Node property (Default: 'Eigenvector_centrality')
+    col : tuple of str
+        Colors for G_a and G_b (default: ('orange','skyblue'))
+    compare_rank : bool, optional
+        Compare relative difference in rank of 'var' rather than difference in value (default: False)
+    excl : list, optional
+        List of strings referring to nodes to exclude from plot.
     
-    Returns:
-        - a lollipop graph
-    
+    Returns
+    -------
+    matplotlib figure
+        A lollipop graph showing the relative difference in 'var' between graphs in tuple G.
+
     """
     
     node_prpty = var
