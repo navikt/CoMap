@@ -45,10 +45,24 @@ class CoMap():
 
     Methods
     -------
-    set_deltas(self, deltas={})
+    set_deltas( deltas={})
         Setter function for deltas.
-    aggregate_maps(self, G=[], node_tags={})
+    aggregate_maps(G=[], node_tags={})
         Aggregate list of networkX Graphs in list G and attach to aggregate to CoMap object map.
+    map_properties(sort_by=['Pagerank', 'Out_degree_wg'])
+        Compute key properties of nodes in the aggregate map.
+    get_n_highest_ranking_nodes(n ,metrics=[], color_cells=True)
+        Extract the n nodes with the highest rank (highest value) in a given graph metric.
+    plot_map(layout='')
+        Plot aggregated graph.
+    plot_ego_map(n,direction='', layout='')
+        Plot ego map of node n.
+    plot_map_deltas()
+        Plot map deltas.
+    plot_quadrant_scatter(skip=None, prefix='')
+        Plot a "quadrant" scatter of nodes in aggregated graph along three node properties.
+    generate_synthetic_graph(noise_scale=0.2, smear_func='laplace' , top_k=0.5, plot=True)
+        Generate a "synthetic" version of aggregated graph with similar statistical properties.
 
     """
     
@@ -225,18 +239,30 @@ class CoMap():
 
 
     def plot_map(self,layout=''):
+        """ Plot map.
+
+        """
 
         return plot_map(self.map, layout)
 
     def plot_ego_map(self,n,direction='', layout=''):
+        """ Plot ego map of node n.
+
+        """
 
         return plot_ego_map(self.map, n, direction, layout)
 
     def plot_map_deltas(self):
+        """ Plot map deltas.
+
+        """
 
         return plot_graph_deltas(self.graph_deltas)
 
     def plot_quadrant_scatter(self, skip=None, prefix=''):
+        """ Plot scatter of nodes along three node attributes.
+
+        """
 
         return quadrant_scatter( self.map_properties(), skip=skip, prefix=prefix )
 
@@ -244,9 +270,9 @@ class CoMap():
         """
         Create a synthetic version of senstive CoMap graph.
 
-        Parameters
-        ----------
-        noise_scale: float 
+        Parameters:
+        -----------
+        noise_scale : float 
             Noise parameter controlling the amount of noise to apply (default:0.2)
         smear_func : str 
             Noise function to apply smearing (default:'laplace')
@@ -255,8 +281,8 @@ class CoMap():
         plot : bool
             If True, plot of graph perturbations is returned (default: True)
 
-        Yields
-        ------
+        Returns:
+        --------
         S : networkX DiGraph 
             Synthetic graph
         A_diff : numpy.matrix 

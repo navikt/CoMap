@@ -10,20 +10,28 @@ def generate_synthetic_graph(G, noise_scale=0.2, smear_func='laplace', top_k=0.5
     of a randomly noised adjancency matrix. Noising targets low degree nodes disproportionately, so as to reduce the reidentification risk 
     (and attribute disclosure risk?) of nodes in the aggregate map that can be traced back to only a small number of individual maps.
 
-    Args:
-        - G: A networkx graph.
-        - noise_scale: controls how much noise is added to entries in the adjancency matrix. Defaults to the exponential decay parameter in a Laplace distribution.
-        - smear_func: (optional) alternative noise ("smearing") function, e.g. np.random.normal( loc=0.0, scale = 0.3 ). If None, a Laplace distribution is used.
-        - top_k: top k number (int) or fraction (float) of eigenvectors to use in the SVD-reconstruction of the matrix
+    Parameters:
+    -----------
+    G : networkx graph
+        Graph to synthesize.
+    noise_scale : float 
+        Controls how much noise is added to entries in the adjancency matrix. Defaults to the exponential decay parameter in a Laplace distribution.
+    smear_func : string (optional) 
+        Noise ("smearing") function, either 'laplace' or 'normal' (default: 'laplace')
+    top_k : int or float
+         top k number (int) or fraction (float) of eigenvectors to use in the SVD-reconstruction of the matrix
 
 
-    Yields:
-        - synmap: a (laplace)-smeared, partially randomised and singular value decomposed networkX graph S, of the same type and with similar attributes as input graph G.
-        - a_diff: a numpy matrix capturing the sum perturbations performed on the input adjacency matrix (NB! Should never be released with synthetic map)
-        - noise: a numpy array containing random noise additions to input adjacency matrix before SVD-reconstruction (NB! should never be released with synthetic map)
+    Returns:
+    --------
+    synmap : networkx graph
+        A (laplace)-smeared, partially randomised and singular value decomposed networkX graph S, of the same type and with similar attributes as input graph G.
+    a_diff : numpy matrix 
+        Matrix capturing the sum perturbations performed on the input adjacency matrix (NB! Should never be released with synthetic map)
+    noise : numpy array 
+        Array containing random noise additions to input adjacency matrix before SVD-reconstruction (NB! should never be released with synthetic map)
 
-    Raises:
-        IOError: ...?
+    
     """
 
 
@@ -35,14 +43,22 @@ def generate_synthetic_graph(G, noise_scale=0.2, smear_func='laplace', top_k=0.5
         A zero entry corresponds to the absence of an edge in the aggregated graph and hence (unlike low non-zero values) does not 
         disclose respondents. (Todo: Risk of disclosing the absence of a property?)
 
-        Args: 
-            - M: numpy matrix representing the adjancency matrix of the graph
-            - s: exponential decay parameter in laplace distribution
+        Parameters:
+        ----------- 
+        M : numpy matrix 
+            Adjancency matrix of the graph
+        s : float 
+            Exponential decay parameter in laplace distribution
+        smear_funct : string
+            Smearing function, either 'laplace' or 'normal' (default: 'laplace')
         
-        Returns: 
-            - a noised numpy matrix of A.shape, where all non-zero values are perturbed by a random number
+        Returns:
+        -------- 
+        A : numpy matrix
+            A noised numpy matrix of A.shape, where all non-zero values are perturbed by a random number
                 drawn from a laplace distribution of scale s
-            - an array of noise applied to the elements of input matrix M
+        noise : list 
+            An array of noise applied to the elements of input matrix M
         """
 
         def _smearing(smear_func):
@@ -96,15 +112,20 @@ def generate_synthetic_graph(G, noise_scale=0.2, smear_func='laplace', top_k=0.5
         """
         Decompose matrix A using singular value decomposition and reconstruct an approximation A_approx using k eigenvectors
 
-        To do: # lage en lite forkalring på hvoerdan sette k verdi (antall egenvektorer som skal brukes)
+        To do: # lage en liten forklaring på hvordan sette k verdi (antall egenvektorer som skal brukes)
         
-        Args: 
-            - A: numpy matrix of shape (n,n)
-            - k: number (if int) or fraction (if float) of eigenvalues to use in reconstruction. (If the full set of eigenvectors are used, matrix A 
+        Parameters:
+        ----------- 
+        A : numpy matrix 
+            Martrix of shape (n,n)
+        k : int or float
+            Number (if int) or fraction (if float) of eigenvalues to use in reconstruction. (If the full set of eigenvectors are used, matrix A 
                  is fully recovered.)
 
-        Returns: 
-            - A_approx: numpy matrix (shape (n,n)) approximation of A
+        Returns:
+        -------- 
+        A_approx : numpy matrix 
+            Matrix of shape (n,n) approximation of A
         """
 
         if( isinstance(k,float) ):
