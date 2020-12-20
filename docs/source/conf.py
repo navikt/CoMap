@@ -47,7 +47,11 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
     # Add napoleon to the extensions list
-    'sphinx.ext.napoleon'
+    'sphinx.ext.napoleon',
+    # Add jupyter sphinx
+    'jupyter_sphinx',
+    # Add matplotlib plot
+    'matplotlib.sphinxext.plot_directive',
 ]
 
 # Add any paths that contain templates here, relative to this directory.

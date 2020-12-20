@@ -6,6 +6,7 @@ Basic usage
 Import the CoMap module:
 
 .. high-light: python
+
 ::
 
   from comap.mapper import CoMap
@@ -15,15 +16,14 @@ functionality to aggregate participant maps:
 
 
 .. high-light: python
-::
-
+ 
   #create 80 random participant graphs
 
   participant_maps = []
   for i in range(1,50):
-    n = np.random.randint(10,15)
-    m = n*np.random.randint(3,5)
-    m = nx.gnm_random_graph(n,m, directed=True)
+    n = numpy.random.randint(10,15)
+    m = n*numpy.random.randint(3,5)
+    m = networkX.gnm_random_graph(n,m, directed=True)
     for (u,v) in m.edges():
         m.edges[u][v]['weight'] = 1
     
@@ -91,10 +91,12 @@ also provided:
 
 
 
+.. jupyter-execute::
 
-.. high-light: python
-
-::
+  import sys
+  sys.path.append('/Users/rprabhu/Ana/SystemEffects/comap/')
+  import numpy as np
+  import networkx as nx
 
   from comap.mapper import CoMap
   from comap.graph_utils import (compute_graph_deltas)
@@ -108,8 +110,8 @@ also provided:
     n = np.random.randint(10,15)
     m = n*np.random.randint(3,5)
     m = nx.gnm_random_graph(n,m, directed=True)
-    for (u,v) in m.edges():
-        m.edges[u][v]['weight'] = 1
+    #for (u,v) in m.edges():
+    #    m.edges[u][v]['weight'] = 1
     
   participant_maps.append(m)
   
@@ -120,3 +122,27 @@ also provided:
   # plot aggregate ensemble
   fig = G_agg.plot_map()
   fig.show()
+
+
+
+Map properties
+^^^^^^^^^^^^^^
+CoMap provides a few handy utilties to extract key properties from the aggregated map.
+
+And this:
+
+.. jupyter-execute::
+
+  G_agg.plot_quadrant_scatter()
+
+And get map properties:
+
+.. jupyter-execute::
+
+  G_agg.map_properties(sort_by=['Pagerank'])
+
+Or just get 5 highest ranking nodes:
+
+.. jupyter-execute::
+
+  G_agg.get_n_highest_ranking_nodes(n=10,metrics=['Pagerank','Node_degree','Betweenness_centrality'])

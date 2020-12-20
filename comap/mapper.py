@@ -9,10 +9,6 @@
 .. moduleauthor:: Daniel Johannessen, 
                   Phuong Nhu Nguyen, 
                   Robindra Prabhu
-
-.. todo::
-    - plot utils
-    - synt utils
 """
 
 import pandas as pd
