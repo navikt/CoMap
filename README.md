@@ -6,7 +6,7 @@ framework of the System Effects methodology, such as graph relabelling,
 graph aggregation, graph analysis tools and tools to minimize the potential leakage 
 of private information in aggregate graphs.
 
-The full docs are found [here](https://navikt.github.io/comap/).
+The full docs are found [here](https://navikt.github.io/CoMap/).
 
 **System Effects** is a research methodology to explore the 'user' or citizen 
 experience of complex phenomena. Drawing on soft systems, fuzzy
