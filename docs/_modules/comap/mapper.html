@@ -1,0 +1,515 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>comap.mapper &mdash; CoMap 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/jupyter-sphinx.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/thebelab.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/thebelab-helper.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> CoMap
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Basic usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../synt.html">Synthetic graph generation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CoMap</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>comap.mapper</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for comap.mapper</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: mapper</span>
+<span class="sd">   :platform: Unix, macOS</span>
+<span class="sd">   :synopsis: Toolkit for building and examining aggregated graphs using the System Effects methodology.</span>
+
+<span class="sd">.. moduleauthor:: Daniel Johannessen, </span>
+<span class="sd">                  Phuong Nhu Nguyen, </span>
+<span class="sd">                  Robindra Prabhu</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">colors</span>
+
+<span class="kn">from</span> <span class="nn">comap.plot_utils</span> <span class="kn">import</span> <span class="p">(</span><span class="n">plot_map</span><span class="p">,</span><span class="n">plot_ego_map</span><span class="p">,</span><span class="n">plot_graph_deltas</span><span class="p">,</span> <span class="n">quadrant_scatter</span><span class="p">,</span> <span class="n">plot_graph_perturbations</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">comap.synth_utils</span> <span class="kn">import</span> <span class="p">(</span><span class="n">generate_synthetic_graph</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="CoMap"><a class="viewcode-back" href="../../comap.html#comap.mapper.CoMap">[docs]</a><span class="k">class</span> <span class="nc">CoMap</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class to represent aggregated &quot;System Effects&quot; graph with associated properties.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    map :  networkX DiGraph </span>
+<span class="sd">        Representing an aggregated &quot;System Effects&quot; graph.</span>
+<span class="sd">    name : str, optional </span>
+<span class="sd">        Name to tag aggregated &quot;System Effects&quot; graph.</span>
+<span class="sd">    grap_deltas : dict </span>
+<span class="sd">        Dictionary holding the deltas between original and relabelled constitutents of aggregated graph.</span>
+<span class="sd">    node_labels : dict </span>
+<span class="sd">        Dictionary mapping node numbers to labels.</span>
+<span class="sd">    node_colors : dict </span>
+<span class="sd">        Dictionary mapping node numbers to colors.</span>
+<span class="sd">    synmap : network DiGraph </span>
+<span class="sd">        Grap representing a synthetic version of map.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    set_deltas( deltas={})</span>
+<span class="sd">        Setter function for deltas.</span>
+<span class="sd">    aggregate_maps(G=[], node_tags={})</span>
+<span class="sd">        Aggregate list of networkX Graphs in list G and attach to aggregate to CoMap object map.</span>
+<span class="sd">    map_properties(sort_by=[&#39;Pagerank&#39;, &#39;Out_degree_wg&#39;])</span>
+<span class="sd">        Compute key properties of nodes in the aggregate map.</span>
+<span class="sd">    get_n_highest_ranking_nodes(n ,metrics=[], color_cells=True)</span>
+<span class="sd">        Extract the n nodes with the highest rank (highest value) in a given graph metric.</span>
+<span class="sd">    plot_map(layout=&#39;&#39;)</span>
+<span class="sd">        Plot aggregated graph.</span>
+<span class="sd">    plot_ego_map(n,direction=&#39;&#39;, layout=&#39;&#39;)</span>
+<span class="sd">        Plot ego map of node n.</span>
+<span class="sd">    plot_map_deltas()</span>
+<span class="sd">        Plot map deltas.</span>
+<span class="sd">    plot_quadrant_scatter(skip=None, prefix=&#39;&#39;)</span>
+<span class="sd">        Plot a &quot;quadrant&quot; scatter of nodes in aggregated graph along three node properties.</span>
+<span class="sd">    generate_synthetic_graph(noise_scale=0.2, smear_func=&#39;laplace&#39; , top_k=0.5, plot=True)</span>
+<span class="sd">        Generate a &quot;synthetic&quot; version of aggregated graph with similar statistical properties.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;se_graph&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Inits CoMap class with empty attributes&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">map</span>    <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>  <span class="c1"># initialise empty DiGraph()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span>   <span class="o">=</span> <span class="n">name</span>
+
+        <span class="c1"># initialise dicts for saving properties</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph_deltas</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># node attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_labels</span> <span class="o">=</span> <span class="n">node_labels</span><span class="o">=</span><span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_colors</span> <span class="o">=</span> <span class="n">node_colors</span><span class="o">=</span><span class="p">{}</span>
+
+        <span class="c1"># initialise empty DiGraph() for synthetic graph</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">synmap</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>  
+
+    
+<div class="viewcode-block" id="CoMap.set_deltas"><a class="viewcode-back" href="../../comap.html#comap.mapper.CoMap.set_deltas">[docs]</a>    <span class="k">def</span> <span class="nf">set_deltas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deltas</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="sd">&quot;&quot;&quot; Set graph deltas &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph_deltas</span> <span class="o">=</span> <span class="n">deltas</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+    
+<div class="viewcode-block" id="CoMap.aggregate_maps"><a class="viewcode-back" href="../../comap.html#comap.mapper.CoMap.aggregate_maps">[docs]</a>    <span class="k">def</span> <span class="nf">aggregate_maps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="p">[],</span> <span class="n">node_tags</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Takes a list of DiGraphs and aggregates common edges between nodes to create an aggregate graph.</span>
+<span class="sd">        Attach aggregate graph as an attribute to CoMap object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ---------- </span>
+<span class="sd">        G : list </span>
+<span class="sd">            List of DiGraps</span>
+<span class="sd">        node_tags : dict </span>
+<span class="sd">            Dictionary mapping node numbers to labels, e.g {0:&#39;A&#39;,1:&#39;cat&#39;,2:&#39;family&#39;,...}</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">map</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span> 
+        
+        <span class="c1"># loop over graphs in list of graphs</span>
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">G</span><span class="p">:</span>
+            <span class="c1"># add nodes to graph</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+            <span class="c1"># loop over edges </span>
+            <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                <span class="c1"># if edge is already present, add weight to edge</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">has_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">edge</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span>
+                <span class="c1"># if edge is not already present, add it with weight=1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="c1"># relabel nodes according to mapping provided by &#39;node_tags&#39;</span>
+        <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;node_label&#39;</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="n">node_tags</span><span class="p">)</span> 
+        <span class="n">nx</span><span class="o">.</span><span class="n">relabel_nodes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="n">mapping</span><span class="o">=</span><span class="n">node_tags</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># assign a random color to each node</span>
+        <span class="n">colour_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span> <span class="nb">list</span><span class="p">(</span><span class="n">colors</span><span class="o">.</span><span class="n">get_named_colors_mapping</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">)</span> <span class="p">)</span>
+        <span class="n">colour_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="n">colour_list</span><span class="p">)</span> <span class="p">)</span>
+        <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;node_color&#39;</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="n">colour_dict</span><span class="p">)</span>
+
+        <span class="c1"># save node attributes to CoMap object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_labels</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;node_label&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_colors</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;node_color&#39;</span><span class="p">)</span>
+    
+        <span class="k">return</span></div>
+    
+<div class="viewcode-block" id="CoMap.map_properties"><a class="viewcode-back" href="../../comap.html#comap.mapper.CoMap.map_properties">[docs]</a>    <span class="k">def</span> <span class="nf">map_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sort_by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Pagerank&#39;</span><span class="p">,</span> <span class="s1">&#39;Out_degree_wg&#39;</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute key properties of nodes in the aggregate map. </span>
+<span class="sd">        Returns a sorted pandas DataFrame with graph properties.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sort_by : list </span>
+<span class="sd">            List of properties to sort dataframe.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pandas DataFrame </span>
+<span class="sd">            Dataframe with a set of graph metrics computed for each node in the graph.</span>
+<span class="sd">    </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    
+        <span class="n">metrics</span> <span class="o">=</span> <span class="p">{</span>
+        
+            <span class="c1"># Node degree</span>
+            <span class="s1">&#39;Node_degree&#39;</span> <span class="p">:</span> <span class="nb">dict</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">degree</span> <span class="p">)</span>
+            <span class="c1"># Node out-degree</span>
+            <span class="p">,</span><span class="s1">&#39;Out_degree&#39;</span> <span class="p">:</span> <span class="nb">dict</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">out_degree</span> <span class="p">)</span>
+            <span class="c1"># Node weighted out-degree</span>
+            <span class="p">,</span><span class="s1">&#39;Out_degree_wg&#39;</span> <span class="p">:</span> <span class="nb">dict</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">out_degree</span><span class="p">(</span><span class="n">weight</span><span class="o">=</span><span class="s1">&#39;weight&#39;</span><span class="p">)</span> <span class="p">)</span>
+            <span class="c1"># Node in-degree</span>
+            <span class="p">,</span><span class="s1">&#39;In_degree&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">in_degree</span> <span class="p">)</span>
+            <span class="c1"># Node weighted in-degree</span>
+            <span class="p">,</span><span class="s1">&#39;In_degree_wg&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">in_degree</span><span class="p">(</span><span class="n">weight</span><span class="o">=</span><span class="s1">&#39;weight&#39;</span><span class="p">)</span> <span class="p">)</span>
+            <span class="c1"># Node pagerank</span>
+            <span class="p">,</span><span class="s1">&#39;Pagerank&#39;</span> <span class="p">:</span> <span class="nb">dict</span><span class="p">(</span> <span class="n">nx</span><span class="o">.</span><span class="n">pagerank</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">)</span> <span class="p">)</span>
+            <span class="c1"># Node eigenvector centrality</span>
+            <span class="p">,</span><span class="s1">&#39;Eigenvector_centrality&#39;</span> <span class="p">:</span> <span class="nb">dict</span><span class="p">(</span> <span class="n">nx</span><span class="o">.</span><span class="n">eigenvector_centrality</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">)</span> <span class="p">)</span>
+            <span class="c1"># Node degree centrality</span>
+            <span class="p">,</span><span class="s1">&#39;Degree_centrality&#39;</span> <span class="p">:</span> <span class="nb">dict</span><span class="p">(</span> <span class="n">nx</span><span class="o">.</span><span class="n">degree_centrality</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">)</span> <span class="p">)</span>
+            <span class="c1"># Node closeness centrality</span>
+            <span class="p">,</span><span class="s1">&#39;Closeness_centrality&#39;</span> <span class="p">:</span> <span class="nb">dict</span><span class="p">(</span> <span class="n">nx</span><span class="o">.</span><span class="n">closeness_centrality</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">)</span> <span class="p">)</span>
+            <span class="c1"># Node betweenness centrality</span>
+            <span class="p">,</span><span class="s1">&#39;Betweenness_centrality&#39;</span> <span class="p">:</span> <span class="nb">dict</span><span class="p">(</span> <span class="n">nx</span><span class="o">.</span><span class="n">betweenness_centrality</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">to_undirected</span><span class="p">()</span> <span class="p">)</span> <span class="p">)</span>
+            <span class="c1"># Node Katz centrality</span>
+            <span class="c1">#,&#39;Katz_centrality&#39; : dict( nx.katz_centrality( self.map.to_undirected() ) )</span>
+            <span class="c1"># Node communicability centrality</span>
+            <span class="c1">#,&#39;Communicability centrality&#39; : dict( nx.communicability_centrality( self.map.to_undirected() ) )</span>
+         
+        <span class="p">}</span>
+
+        <span class="n">df_node_properties</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span>
+        <span class="n">df_node_properties</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">nodes</span><span class="p">()),</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span> <span class="p">)</span>
+        <span class="n">df_node_properties</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span> <span class="n">sort_by</span> <span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span> <span class="p">)</span>
+    
+        <span class="k">return</span> <span class="n">df_node_properties</span></div>
+
+
+<div class="viewcode-block" id="CoMap.get_n_highest_ranking_nodes"><a class="viewcode-back" href="../../comap.html#comap.mapper.CoMap.get_n_highest_ranking_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_n_highest_ranking_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span> <span class="p">,</span><span class="n">metrics</span><span class="o">=</span><span class="p">[],</span> <span class="n">color_cells</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract the n nodes with the highest rank (highest value) in a given graph metric.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n : int </span>
+<span class="sd">            Number of items to retrieve.</span>
+<span class="sd">        metrics : list</span>
+<span class="sd">            List of metrics to evaluate </span>
+<span class="sd">        color_cells : bool</span>
+<span class="sd">            Color code cells (default: True)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        ------- </span>
+<span class="sd">        pandas DataFrame </span>
+<span class="sd">            Dataframe with index:rank, column:metric, cell: node</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">highlight_cells</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">c_dict</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">            Get node color from supplied c_dict and return a string </span>
+<span class="sd">            specifying cell background color.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">colour</span><span class="o">=</span> <span class="n">c_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s1">&#39;background-color: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">colour</span>
+
+        <span class="n">df_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_properties</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">metrics</span><span class="p">:</span>
+            <span class="n">metrics</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df_</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="c1"># if a list of metrics is not specified, use all column values</span>
+
+        <span class="n">dfn</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span> <span class="n">index</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">columns</span> <span class="o">=</span> <span class="n">metrics</span><span class="p">)</span> <span class="c1"># create empty dataframe</span>
+
+        <span class="k">for</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">metrics</span><span class="p">:</span>
+            <span class="n">dfn</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">metric</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="n">dfn</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Rank&#39;</span>
+
+        <span class="c1"># Colour cells by node color code</span>
+        <span class="k">if</span> <span class="n">color_cells</span><span class="p">:</span>
+            <span class="n">dfn</span> <span class="o">=</span> <span class="n">dfn</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">highlight_cells</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;node_color&#39;</span><span class="p">)))</span>
+
+
+        <span class="k">return</span> <span class="n">dfn</span></div>
+
+
+<div class="viewcode-block" id="CoMap.plot_map"><a class="viewcode-back" href="../../comap.html#comap.mapper.CoMap.plot_map">[docs]</a>    <span class="k">def</span> <span class="nf">plot_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">layout</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Plot map.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">plot_map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="n">layout</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CoMap.plot_ego_map"><a class="viewcode-back" href="../../comap.html#comap.mapper.CoMap.plot_ego_map">[docs]</a>    <span class="k">def</span> <span class="nf">plot_ego_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">direction</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Plot ego map of node n.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">plot_ego_map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">layout</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CoMap.plot_map_deltas"><a class="viewcode-back" href="../../comap.html#comap.mapper.CoMap.plot_map_deltas">[docs]</a>    <span class="k">def</span> <span class="nf">plot_map_deltas</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Plot map deltas.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">plot_graph_deltas</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph_deltas</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CoMap.plot_quadrant_scatter"><a class="viewcode-back" href="../../comap.html#comap.mapper.CoMap.plot_quadrant_scatter">[docs]</a>    <span class="k">def</span> <span class="nf">plot_quadrant_scatter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skip</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Plot scatter of nodes along three node attributes.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">quadrant_scatter</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_properties</span><span class="p">(),</span> <span class="n">skip</span><span class="o">=</span><span class="n">skip</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span> <span class="p">)</span></div>
+
+<div class="viewcode-block" id="CoMap.generate_synthetic_graph"><a class="viewcode-back" href="../../comap.html#comap.mapper.CoMap.generate_synthetic_graph">[docs]</a>    <span class="k">def</span> <span class="nf">generate_synthetic_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">noise_scale</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">smear_func</span><span class="o">=</span><span class="s1">&#39;laplace&#39;</span> <span class="p">,</span> <span class="n">top_k</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a synthetic version of senstive CoMap graph.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        noise_scale : float </span>
+<span class="sd">            Noise parameter controlling the amount of noise to apply (default:0.2)</span>
+<span class="sd">        smear_func : str </span>
+<span class="sd">            Noise function to apply smearing (default:&#39;laplace&#39;)</span>
+<span class="sd">        top_k : int or float </span>
+<span class="sd">            Top k number (int) or fraction (float) of eigenvectors to use in the SVD-reconstruction of the matrix (default:0.5)</span>
+<span class="sd">        plot : bool</span>
+<span class="sd">            If True, plot of graph perturbations is returned (default: True)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        S : networkX DiGraph </span>
+<span class="sd">            Synthetic graph</span>
+<span class="sd">        A_diff : numpy.matrix </span>
+<span class="sd">            Matrix capturing the sum perturbations performed on the input adjacency matrix.</span>
+<span class="sd">        degN_noise : list </span>
+<span class="sd">            List of smearing perturbations to degree N&gt;1 nodes.</span>
+<span class="sd">        deg1_noise : list </span>
+<span class="sd">            List of smearing perturbations to degree N=1 nodes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">S</span> <span class="o">=</span> <span class="n">CoMap</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_synth&#39;</span> <span class="p">)</span>
+        <span class="c1"># create synthetic graph object</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="n">A_diff</span><span class="p">,</span> <span class="n">degN_noise</span><span class="p">,</span> <span class="n">deg1_noise</span> <span class="o">=</span> <span class="n">generate_synthetic_graph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map</span> 
+                                                                        <span class="p">,</span> <span class="n">noise_scale</span> <span class="o">=</span> <span class="n">noise_scale</span>
+                                                                        <span class="p">,</span> <span class="n">smear_func</span> <span class="o">=</span> <span class="n">smear_func</span>
+                                                                        <span class="p">,</span> <span class="n">top_k</span> <span class="o">=</span> <span class="n">top_k</span>
+                                                                        <span class="p">)</span>
+
+        <span class="c1"># copy node attributes and assign to synthetic map</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">node_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_labels</span>
+        <span class="n">S</span><span class="o">.</span><span class="n">node_colors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_colors</span>
+        <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;node_label&#39;</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">node_labels</span><span class="p">)</span>
+        <span class="n">nx</span><span class="o">.</span><span class="n">relabel_nodes</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="n">mapping</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">node_labels</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;node_color&#39;</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">node_colors</span><span class="p">)</span>
+
+        <span class="c1"># plot graph perturbations</span>
+        <span class="k">if</span> <span class="n">plot</span><span class="p">:</span>
+            <span class="n">plot_graph_perturbations</span><span class="p">(</span><span class="n">A_diff</span><span class="p">,</span> <span class="n">degN_noise</span><span class="p">,</span> <span class="n">deg1_noise</span><span class="p">)</span>
+    
+        <span class="k">return</span> <span class="n">S</span><span class="p">,</span> <span class="n">A_diff</span><span class="p">,</span> <span class="n">degN_noise</span><span class="p">,</span> <span class="n">deg1_noise</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Daniel Johannessen, Phuong Nhu Nguyen, Robindra Prabhu
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

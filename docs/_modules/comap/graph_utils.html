@@ -1,0 +1,343 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>comap.graph_utils &mdash; CoMap 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/jupyter-sphinx.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/thebelab.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/thebelab-helper.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> CoMap
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Basic usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../synt.html">Synthetic graph generation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CoMap</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>comap.graph_utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for comap.graph_utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+
+
+<div class="viewcode-block" id="compute_graph_deltas"><a class="viewcode-back" href="../../comap.html#comap.graph_utils.compute_graph_deltas">[docs]</a><span class="k">def</span> <span class="nf">compute_graph_deltas</span><span class="p">(</span><span class="n">G</span><span class="o">=</span><span class="p">{}):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute differences in key statistics between a pair of graphs.</span>
+
+<span class="sd">        Input: G (dict): dictionary of the form {g_A:g_a,g_B:g_b,...} of graph pairs (g_K,g_k) to be compared</span>
+<span class="sd">               </span>
+<span class="sd">        Output: (dict) of numpy arrays with delta statistics</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+
+    <span class="k">def</span> <span class="nf">_convert_to_array</span><span class="p">(</span><span class="n">dictionary</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Helper function to convert lists of values in a dictionary to numpy arrays&#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">dictionary</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+    
+    <span class="n">keylist</span> <span class="o">=</span>  <span class="p">[</span> <span class="s1">&#39;delta_n_nodes&#39;</span>
+                <span class="p">,</span><span class="s1">&#39;delta_n_edges&#39;</span>
+                <span class="p">,</span><span class="s1">&#39;delta_density&#39;</span>
+                <span class="p">,</span><span class="s1">&#39;delta_radius&#39;</span>
+                <span class="p">,</span><span class="s1">&#39;delta_diameter&#39;</span>
+                <span class="p">]</span>
+    <span class="c1"># initialise empty dict</span>
+    <span class="n">deltas</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">keylist</span><span class="p">,</span> <span class="p">[])</span> 
+
+    <span class="c1"># delta: number of nodes</span>
+    <span class="n">deltas</span><span class="p">[</span><span class="s1">&#39;delta_n_nodes&#39;</span><span class="p">]</span> <span class="o">=</span>  <span class="p">[</span> <span class="p">(</span> <span class="n">nx</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">(</span><span class="n">raw_map</span><span class="p">)</span> <span class="o">-</span> <span class="n">nx</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">(</span><span class="n">recat_map</span><span class="p">)</span> <span class="p">)</span> 
+                                <span class="k">for</span> <span class="n">raw_map</span><span class="p">,</span><span class="n">recat_map</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                                <span class="p">]</span> 
+    <span class="c1"># delta: number of edges</span>
+    <span class="n">deltas</span><span class="p">[</span><span class="s1">&#39;delta_n_edges&#39;</span><span class="p">]</span> <span class="o">=</span>  <span class="p">[</span> <span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">(</span><span class="n">raw_map</span><span class="p">)</span> <span class="o">-</span> <span class="n">nx</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">(</span><span class="n">recat_map</span><span class="p">))</span> 
+                                <span class="k">for</span> <span class="n">raw_map</span><span class="p">,</span><span class="n">recat_map</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                                <span class="p">]</span> 
+    <span class="c1"># delta: density</span>
+    <span class="n">deltas</span><span class="p">[</span><span class="s1">&#39;delta_density&#39;</span><span class="p">]</span> <span class="o">=</span>  <span class="p">[</span> <span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">raw_map</span><span class="p">)</span> <span class="o">-</span> <span class="n">nx</span><span class="o">.</span><span class="n">density</span><span class="p">(</span><span class="n">recat_map</span><span class="p">))</span> 
+                                    <span class="k">for</span> <span class="n">raw_map</span><span class="p">,</span><span class="n">recat_map</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> 
+                                <span class="p">]</span>
+    <span class="c1"># delta: radius</span>
+    <span class="c1">#deltas[&#39;delta_radius&#39;] = [ (nx.radius(raw_map) - nx.radius(recat_map)) </span>
+    <span class="c1">#                            for raw_map,recat_map in Gc.items()</span>
+    <span class="c1">#                            ]</span>
+     <span class="c1"># delta: diameter</span>
+    <span class="c1">#deltas[&#39;delta_diameter&#39;] = [ (nx.diameter(raw_map) - nx.diameter(recat_map)) </span>
+    <span class="c1">#                            for raw_map,recat_map in Gc.items()</span>
+    <span class="c1">#                            ]</span>
+        
+    <span class="c1"># convert lists to numpy arrays</span>
+    <span class="n">deltas</span> <span class="o">=</span> <span class="n">_convert_to_array</span><span class="p">(</span><span class="n">deltas</span><span class="p">)</span>     
+        
+    <span class="k">return</span> <span class="n">deltas</span></div>
+
+
+<div class="viewcode-block" id="plot_comparative_importance"><a class="viewcode-back" href="../../comap.html#comap.graph_utils.plot_comparative_importance">[docs]</a><span class="k">def</span> <span class="nf">plot_comparative_importance</span><span class="p">(</span><span class="n">G</span><span class="p">,</span>  
+                                <span class="n">var</span><span class="o">=</span><span class="s1">&#39;Eigenvector_centrality&#39;</span><span class="p">,</span>
+                                <span class="n">col</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span><span class="s1">&#39;skyblue&#39;</span><span class="p">),</span>
+                                <span class="n">compare_rank</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                                <span class="n">excl</span><span class="o">=</span><span class="kc">None</span>
+                               <span class="p">):</span>
+    
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a lollipop plot of the difference between graph G_a and graph G_b in a user provided node property.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        - G   : (tuple), of CoMap graphs to compare (e.g. (G_a, G_b))</span>
+<span class="sd">        - var : (str), node property (default: &#39;Eigenvector_centrality&#39;)</span>
+<span class="sd">        - col : (tuple), string of colors for G_a and G_b (default: (&#39;orange&#39;,&#39;skyblue&#39;))</span>
+<span class="sd">        - compare_rank : (bool), optional, compare relative difference in rank of &#39;var&#39; rather than difference in value (default: False)</span>
+<span class="sd">        - excl: (list), optional, list of strings referring to nodes to exclude from plot</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        - a lollipop graph</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">node_prpty</span> <span class="o">=</span> <span class="n">var</span>
+    
+    <span class="c1"># get map properties</span>
+    <span class="n">df_A</span> <span class="o">=</span> <span class="n">G</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">map_properties</span><span class="p">(</span> <span class="n">sort_by</span><span class="o">=</span><span class="p">[</span> <span class="n">node_prpty</span> <span class="p">]</span> <span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">excl</span><span class="p">)</span>
+    <span class="n">df_B</span> <span class="o">=</span> <span class="n">G</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">map_properties</span><span class="p">(</span> <span class="n">sort_by</span><span class="o">=</span><span class="p">[</span> <span class="n">node_prpty</span> <span class="p">]</span> <span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">excl</span><span class="p">)</span>
+    
+    <span class="c1"># compute rank differences</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">compare_rank</span><span class="p">):</span>
+        <span class="n">var</span> <span class="o">=</span> <span class="n">var</span> <span class="o">+</span> <span class="s1">&#39;_rank&#39;</span>
+        <span class="n">df_A</span><span class="p">[</span> <span class="n">var</span> <span class="p">]</span> <span class="o">=</span> <span class="n">df_A</span><span class="p">[</span> <span class="n">node_prpty</span> <span class="p">]</span><span class="o">.</span><span class="n">rank</span><span class="p">()</span>
+        <span class="n">df_B</span><span class="p">[</span> <span class="n">var</span> <span class="p">]</span> <span class="o">=</span> <span class="n">df_B</span><span class="p">[</span> <span class="n">node_prpty</span> <span class="p">]</span><span class="o">.</span><span class="n">rank</span><span class="p">()</span>
+        
+    <span class="c1"># compute normalised difference</span>
+    <span class="n">df_diff</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_A</span> <span class="o">-</span> <span class="n">df_B</span><span class="p">)</span><span class="c1"># / df_B</span>
+    
+    <span class="c1"># dropna to only get nodes present in both graphs</span>
+    <span class="n">df_diff</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="c1">#  sort by var</span>
+    <span class="n">df_diff</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">var</span><span class="p">,</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="c1">#Create a color if the group is &quot;B&quot;</span>
+    <span class="n">color_scheme</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span> <span class="n">df_diff</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    
+    <span class="c1"># Compute range</span>
+    <span class="n">plt_range</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_diff</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">5</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">df_diff</span><span class="p">),</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">df_diff</span><span class="p">)))</span>
+
+    <span class="c1"># plot</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span> 
+    <span class="n">plt</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">plt_range</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">df_diff</span><span class="p">[</span><span class="n">var</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">color_scheme</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df_diff</span><span class="p">[</span><span class="n">var</span><span class="p">],</span> <span class="n">plt_range</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color_scheme</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># decorations</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">plt_range</span><span class="p">,</span> <span class="n">df_diff</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;$\Delta$ &#39;</span><span class="o">+</span><span class="n">var</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Node&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+    
+
+    
+    <span class="n">x</span> <span class="o">=</span> <span class="o">.</span><span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span> <span class="nb">abs</span><span class="p">(</span><span class="n">df_diff</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">&gt;</span> <span class="n">df_diff</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">df_diff</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">df_diff</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="p">)</span> 
+    <span class="n">y</span> <span class="o">=</span> <span class="mf">1.1</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">df_diff</span><span class="p">)</span>
+    
+    <span class="n">bbox_props_a</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">boxstyle</span><span class="o">=</span><span class="s2">&quot;rarrow,pad=0.7&quot;</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ec</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x</span><span class="p">,</span>  <span class="n">y</span><span class="p">,</span> <span class="s2">&quot;Viktigere i </span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">+</span><span class="n">G</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>  <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="n">bbox_props_a</span><span class="p">)</span>
+    
+    <span class="n">bbox_props_b</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">boxstyle</span><span class="o">=</span><span class="s2">&quot;larrow,pad=0.7&quot;</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ec</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s2">&quot;Viktigere i </span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">+</span><span class="n">G</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="n">bbox_props_b</span><span class="p">)</span>
+    
+    
+    <span class="n">xlim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span> <span class="n">df_diff</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">&gt;=</span><span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="mf">1.2</span><span class="o">*</span><span class="n">df_diff</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="mf">1.2</span><span class="o">*</span><span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="n">ylim</span> <span class="o">=</span> <span class="mf">1.1</span><span class="o">*</span><span class="n">y</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="n">xlim</span><span class="p">,</span><span class="n">xlim</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">ylim</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    
+    <span class="k">return</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Daniel Johannessen, Phuong Nhu Nguyen, Robindra Prabhu
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
