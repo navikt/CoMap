@@ -14,7 +14,7 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../..'))
+sys.path.insert(0, os.path.abspath('../../comap/'))
 
 
 # -- Project information -----------------------------------------------------
@@ -45,7 +45,7 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
-    'sphinx.ext.napoleon',
+    'sphinx.ext.githubpages',
     # Add napoleon to the extensions list
     'sphinx.ext.napoleon',
     # Add jupyter sphinx
