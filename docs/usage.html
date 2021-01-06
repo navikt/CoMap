@@ -1,0 +1,597 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Basic usage &mdash; CoMap 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/jupyter-sphinx.css" type="text/css" />
+  <link rel="stylesheet" href="_static/thebelab.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/thebelab-helper.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Synthetic graph generation" href="synt.html" />
+    <link rel="prev" title="Welcome to CoMap’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> CoMap
+          
+
+          
+            
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Basic usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#visualisation">Visualisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#map-properties">Map properties</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="synt.html">Synthetic graph generation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CoMap</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Basic usage</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="basic-usage">
+<span id="usage"></span><h1>Basic usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h1>
+<p>Import the CoMap module:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">comap.mapper</span> <span class="kn">import</span> <span class="n">CoMap</span>
+</pre></div>
+</div>
+<p>This module contains the CoMap class to represent the aggregated map object. It provides key
+functionality to aggregate participant maps:</p>
+<p>Once the aggregated ensemble is represented as a CoMap objects, various utilities allow
+for quick inspection and study of the aggregegate graph. To get key properties or the 5 highest ranking
+nodes in each graph property:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">G_agg</span><span class="o">.</span><span class="n">map_properties</span><span class="p">()</span>
+
+<span class="n">G_agg</span><span class="o">.</span><span class="n">get_n_highest_ranking_nodes</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>CoMap relies on networkX for all graph related operations. The CoMap object is built on top of a networkX
+DiGraph, which can be accessed as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+
+<span class="n">graph</span> <span class="o">=</span> <span class="n">G_agg</span><span class="o">.</span><span class="n">map</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">graph</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">pagerank</span><span class="p">(</span><span class="n">graph</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="section" id="visualisation">
+<h2>Visualisation<a class="headerlink" href="#visualisation" title="Permalink to this headline">¶</a></h2>
+<p>Basic visualisation of the CoMap object:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot a quadrant scatter of all nodes in weighted indegree, weighted outdegree and pagerank</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">G_agg</span><span class="o">.</span><span class="n">plot_quadrant_scatter</span><span class="p">()</span>
+<span class="n">f</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Some custom visualisation like a scatter plot of all nodes in weighted indegree, outdegree and pagerank is
+also provided:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot a quadrant scatter of all nodes in weighted indegree, weighted outdegree and pagerank</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">G_agg</span><span class="o">.</span><span class="n">plot_quadrant_scatter</span><span class="p">()</span>
+<span class="n">f</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;/Users/rprabhu/Ana/SystemEffects/comap/&#39;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+
+<span class="kn">from</span> <span class="nn">comap.mapper</span> <span class="kn">import</span> <span class="n">CoMap</span>
+<span class="kn">from</span> <span class="nn">comap.graph_utils</span> <span class="kn">import</span> <span class="p">(</span><span class="n">compute_graph_deltas</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">comap.helper_utils</span> <span class="kn">import</span> <span class="p">(</span><span class="n">get_reduced_categories</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">comap.plot_utils</span> <span class="kn">import</span> <span class="p">(</span><span class="n">plot_comparative_importance</span><span class="p">)</span>
+
+
+<span class="c1"># create 80 random participant graphs</span>
+<span class="n">participant_maps</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">50</span><span class="p">):</span>
+  <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">)</span>
+  <span class="n">m</span> <span class="o">=</span> <span class="n">n</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+  <span class="n">m</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">gnm_random_graph</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="c1">#for (u,v) in m.edges():</span>
+  <span class="c1">#    m.edges[u][v][&#39;weight&#39;] = 1</span>
+
+<span class="n">participant_maps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+<span class="c1"># create an aggregate ensemble from maps and categories</span>
+<span class="n">G_agg</span> <span class="o">=</span> <span class="n">CoMap</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;raw_aggregate&#39;</span><span class="p">)</span>
+<span class="n">G_agg</span><span class="o">.</span><span class="n">aggregate_maps</span><span class="p">(</span> <span class="n">participant_maps</span> <span class="p">)</span>
+
+<span class="c1"># plot aggregate ensemble</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">G_agg</span><span class="o">.</span><span class="n">plot_map</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/usage_0_1.png" src="_images/usage_0_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="map-properties">
+<h2>Map properties<a class="headerlink" href="#map-properties" title="Permalink to this headline">¶</a></h2>
+<p>CoMap provides a few handy utilties to extract key properties from the aggregated map.</p>
+<p>And this:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">G_agg</span><span class="o">.</span><span class="n">plot_quadrant_scatter</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/usage_1_1.png" src="_images/usage_1_1.png" />
+<img alt="_images/usage_1_2.png" src="_images/usage_1_2.png" />
+</div>
+</div>
+<p>And get map properties:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">G_agg</span><span class="o">.</span><span class="n">map_properties</span><span class="p">(</span><span class="n">sort_by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Pagerank&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Node_degree</th>
+      <th>Out_degree</th>
+      <th>Out_degree_wg</th>
+      <th>In_degree</th>
+      <th>In_degree_wg</th>
+      <th>Pagerank</th>
+      <th>Eigenvector_centrality</th>
+      <th>Degree_centrality</th>
+      <th>Closeness_centrality</th>
+      <th>Betweenness_centrality</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>8</th>
+      <td>7</td>
+      <td>2</td>
+      <td>2</td>
+      <td>5</td>
+      <td>5</td>
+      <td>0.142349</td>
+      <td>0.459469</td>
+      <td>0.7</td>
+      <td>0.666667</td>
+      <td>0.064444</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>6</td>
+      <td>2</td>
+      <td>2</td>
+      <td>4</td>
+      <td>4</td>
+      <td>0.121137</td>
+      <td>0.405368</td>
+      <td>0.6</td>
+      <td>0.555556</td>
+      <td>0.015556</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>7</td>
+      <td>2</td>
+      <td>2</td>
+      <td>5</td>
+      <td>5</td>
+      <td>0.114807</td>
+      <td>0.376872</td>
+      <td>0.7</td>
+      <td>0.666667</td>
+      <td>0.131111</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>6</td>
+      <td>3</td>
+      <td>3</td>
+      <td>3</td>
+      <td>3</td>
+      <td>0.104979</td>
+      <td>0.306992</td>
+      <td>0.6</td>
+      <td>0.526316</td>
+      <td>0.052593</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>7</td>
+      <td>4</td>
+      <td>4</td>
+      <td>3</td>
+      <td>3</td>
+      <td>0.103709</td>
+      <td>0.315543</td>
+      <td>0.7</td>
+      <td>0.526316</td>
+      <td>0.106296</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>7</td>
+      <td>3</td>
+      <td>3</td>
+      <td>4</td>
+      <td>4</td>
+      <td>0.102821</td>
+      <td>0.332836</td>
+      <td>0.7</td>
+      <td>0.555556</td>
+      <td>0.054074</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>6</td>
+      <td>4</td>
+      <td>4</td>
+      <td>2</td>
+      <td>2</td>
+      <td>0.094252</td>
+      <td>0.264984</td>
+      <td>0.6</td>
+      <td>0.434783</td>
+      <td>0.008889</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>0.065419</td>
+      <td>0.223466</td>
+      <td>0.4</td>
+      <td>0.434783</td>
+      <td>0.010000</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>7</td>
+      <td>5</td>
+      <td>5</td>
+      <td>2</td>
+      <td>2</td>
+      <td>0.056159</td>
+      <td>0.154595</td>
+      <td>0.7</td>
+      <td>0.416667</td>
+      <td>0.061852</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>0.052928</td>
+      <td>0.165692</td>
+      <td>0.4</td>
+      <td>0.434783</td>
+      <td>0.017407</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>5</td>
+      <td>4</td>
+      <td>4</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0.041440</td>
+      <td>0.080215</td>
+      <td>0.5</td>
+      <td>0.322581</td>
+      <td>0.033333</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Or just get 5 highest ranking nodes:</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">G_agg</span><span class="o">.</span><span class="n">get_n_highest_ranking_nodes</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Pagerank&#39;</span><span class="p">,</span><span class="s1">&#39;Node_degree&#39;</span><span class="p">,</span><span class="s1">&#39;Betweenness_centrality&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style  type="text/css" >
+#T_eaf8e_row0_col0,#T_eaf8e_row0_col1,#T_eaf8e_row2_col2{
+            background-color:  #f6688e;
+        }#T_eaf8e_row0_col2,#T_eaf8e_row1_col1,#T_eaf8e_row2_col0{
+            background-color:  #419c03;
+        }#T_eaf8e_row1_col0,#T_eaf8e_row5_col1,#T_eaf8e_row8_col2{
+            background-color:  #29465b;
+        }#T_eaf8e_row1_col2,#T_eaf8e_row2_col1,#T_eaf8e_row4_col0{
+            background-color:  #661aee;
+        }#T_eaf8e_row3_col0,#T_eaf8e_row5_col2,#T_eaf8e_row6_col1{
+            background-color:  #fe86a4;
+        }#T_eaf8e_row3_col1,#T_eaf8e_row4_col2,#T_eaf8e_row5_col0{
+            background-color:  #8b3103;
+        }#T_eaf8e_row3_col2,#T_eaf8e_row4_col1,#T_eaf8e_row8_col0{
+            background-color:  #2afeb7;
+        }#T_eaf8e_row6_col0,#T_eaf8e_row7_col1{
+            background-color:  #825f87;
+        }#T_eaf8e_row6_col2,#T_eaf8e_row8_col1{
+            background-color:  #05472a;
+        }#T_eaf8e_row7_col0,#T_eaf8e_row9_col1,#T_eaf8e_row9_col2{
+            background-color:  #789b73;
+        }#T_eaf8e_row7_col2,#T_eaf8e_row9_col0{
+            background-color:  #cbf85f;
+        }</style><table id="T_eaf8e_" ><thead>    <tr>        <th class="index_name level0" >Rank</th>        <th class="col_heading level0 col0" >Pagerank</th>        <th class="col_heading level0 col1" >Node_degree</th>        <th class="col_heading level0 col2" >Betweenness_centrality</th>    </tr></thead><tbody>
+                <tr>
+                        <th id="T_eaf8e_level0_row0" class="row_heading level0 row0" >1</th>
+                        <td id="T_eaf8e_row0_col0" class="data row0 col0" >8</td>
+                        <td id="T_eaf8e_row0_col1" class="data row0 col1" >8</td>
+                        <td id="T_eaf8e_row0_col2" class="data row0 col2" >2</td>
+            </tr>
+            <tr>
+                        <th id="T_eaf8e_level0_row1" class="row_heading level0 row1" >2</th>
+                        <td id="T_eaf8e_row1_col0" class="data row1 col0" >6</td>
+                        <td id="T_eaf8e_row1_col1" class="data row1 col1" >2</td>
+                        <td id="T_eaf8e_row1_col2" class="data row1 col2" >5</td>
+            </tr>
+            <tr>
+                        <th id="T_eaf8e_level0_row2" class="row_heading level0 row2" >3</th>
+                        <td id="T_eaf8e_row2_col0" class="data row2 col0" >2</td>
+                        <td id="T_eaf8e_row2_col1" class="data row2 col1" >5</td>
+                        <td id="T_eaf8e_row2_col2" class="data row2 col2" >8</td>
+            </tr>
+            <tr>
+                        <th id="T_eaf8e_level0_row3" class="row_heading level0 row3" >4</th>
+                        <td id="T_eaf8e_row3_col0" class="data row3 col0" >3</td>
+                        <td id="T_eaf8e_row3_col1" class="data row3 col1" >10</td>
+                        <td id="T_eaf8e_row3_col2" class="data row3 col2" >0</td>
+            </tr>
+            <tr>
+                        <th id="T_eaf8e_level0_row4" class="row_heading level0 row4" >5</th>
+                        <td id="T_eaf8e_row4_col0" class="data row4 col0" >5</td>
+                        <td id="T_eaf8e_row4_col1" class="data row4 col1" >0</td>
+                        <td id="T_eaf8e_row4_col2" class="data row4 col2" >10</td>
+            </tr>
+            <tr>
+                        <th id="T_eaf8e_level0_row5" class="row_heading level0 row5" >6</th>
+                        <td id="T_eaf8e_row5_col0" class="data row5 col0" >10</td>
+                        <td id="T_eaf8e_row5_col1" class="data row5 col1" >6</td>
+                        <td id="T_eaf8e_row5_col2" class="data row5 col2" >3</td>
+            </tr>
+            <tr>
+                        <th id="T_eaf8e_level0_row6" class="row_heading level0 row6" >7</th>
+                        <td id="T_eaf8e_row6_col0" class="data row6 col0" >7</td>
+                        <td id="T_eaf8e_row6_col1" class="data row6 col1" >3</td>
+                        <td id="T_eaf8e_row6_col2" class="data row6 col2" >9</td>
+            </tr>
+            <tr>
+                        <th id="T_eaf8e_level0_row7" class="row_heading level0 row7" >8</th>
+                        <td id="T_eaf8e_row7_col0" class="data row7 col0" >4</td>
+                        <td id="T_eaf8e_row7_col1" class="data row7 col1" >7</td>
+                        <td id="T_eaf8e_row7_col2" class="data row7 col2" >1</td>
+            </tr>
+            <tr>
+                        <th id="T_eaf8e_level0_row8" class="row_heading level0 row8" >9</th>
+                        <td id="T_eaf8e_row8_col0" class="data row8 col0" >0</td>
+                        <td id="T_eaf8e_row8_col1" class="data row8 col1" >9</td>
+                        <td id="T_eaf8e_row8_col2" class="data row8 col2" >6</td>
+            </tr>
+            <tr>
+                        <th id="T_eaf8e_level0_row9" class="row_heading level0 row9" >10</th>
+                        <td id="T_eaf8e_row9_col0" class="data row9 col0" >1</td>
+                        <td id="T_eaf8e_row9_col1" class="data row9 col1" >4</td>
+                        <td id="T_eaf8e_row9_col2" class="data row9 col2" >4</td>
+            </tr>
+    </tbody></table></div></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="synt.html" class="btn btn-neutral float-right" title="Synthetic graph generation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to CoMap’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Daniel Johannessen, Phuong Nhu Nguyen, Robindra Prabhu
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

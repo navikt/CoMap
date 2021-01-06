@@ -1,0 +1,687 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>comap package &mdash; CoMap 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/jupyter-sphinx.css" type="text/css" />
+  <link rel="stylesheet" href="_static/thebelab.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/thebelab-helper.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> CoMap
+          
+
+          
+            
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Basic usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synt.html">Synthetic graph generation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CoMap</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>comap package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/comap.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="comap-package">
+<h1>comap package<a class="headerlink" href="#comap-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-comap.graph_utils">
+<span id="comap-graph-utils-module"></span><h2>comap.graph_utils module<a class="headerlink" href="#module-comap.graph_utils" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="comap.graph_utils.compute_graph_deltas">
+<code class="sig-prename descclassname">comap.graph_utils.</code><code class="sig-name descname">compute_graph_deltas</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">G</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/graph_utils.html#compute_graph_deltas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#comap.graph_utils.compute_graph_deltas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute differences in key statistics between a pair of graphs.</p>
+<blockquote>
+<div><p>Input: G (dict): dictionary of the form {g_A:g_a,g_B:g_b,…} of graph pairs (g_K,g_k) to be compared</p>
+<p>Output: (dict) of numpy arrays with delta statistics</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="comap.graph_utils.plot_comparative_importance">
+<code class="sig-prename descclassname">comap.graph_utils.</code><code class="sig-name descname">plot_comparative_importance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">G</span></em>, <em class="sig-param"><span class="n">var</span><span class="o">=</span><span class="default_value">'Eigenvector_centrality'</span></em>, <em class="sig-param"><span class="n">col</span><span class="o">=</span><span class="default_value">('orange', 'skyblue')</span></em>, <em class="sig-param"><span class="n">compare_rank</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">excl</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/graph_utils.html#plot_comparative_importance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#comap.graph_utils.plot_comparative_importance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a lollipop plot of the difference between graph G_a and graph G_b in a user provided node property.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> (<em>-</em>) – (tuple), of CoMap graphs to compare (e.g. (G_a, G_b))</p></li>
+<li><p><strong>var</strong> (<em>-</em>) – (str), node property (default: ‘Eigenvector_centrality’)</p></li>
+<li><p><strong>col</strong> (<em>-</em>) – (tuple), string of colors for G_a and G_b (default: (‘orange’,’skyblue’))</p></li>
+<li><p><strong>compare_rank</strong> (<em>-</em>) – (bool), optional, compare relative difference in rank of ‘var’ rather than difference in value (default: False)</p></li>
+<li><p><strong>excl</strong> (<em>-</em>) – (list), optional, list of strings referring to nodes to exclude from plot</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>a lollipop graph</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-comap.helper_utils">
+<span id="comap-helper-utils-module"></span><h2>comap.helper_utils module<a class="headerlink" href="#module-comap.helper_utils" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="comap.helper_utils.get_reduced_categories">
+<code class="sig-prename descclassname">comap.helper_utils.</code><code class="sig-name descname">get_reduced_categories</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file</span></em>, <em class="sig-param"><span class="n">sheet_name</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/helper_utils.html#get_reduced_categories"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#comap.helper_utils.get_reduced_categories" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes list and dictionary of categories in excelfile</p>
+<p>needs: filename, name of category sheet and master_cols</p>
+<p>optional: list of indices to exclude</p>
+<p>returns: list of columnnames and dictionary of columnnames</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-comap.mapper">
+<span id="comap-mapper-module"></span><h2>comap.mapper module<a class="headerlink" href="#module-comap.mapper" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-mapper"></span><dl class="py class">
+<dt id="comap.mapper.CoMap">
+<em class="property">class </em><code class="sig-prename descclassname">comap.mapper.</code><code class="sig-name descname">CoMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'se_graph'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/mapper.html#CoMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#comap.mapper.CoMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Class to represent aggregated “System Effects” graph with associated properties.</p>
+<dl class="py attribute">
+<dt id="comap.mapper.CoMap.map">
+<code class="sig-name descname">map</code><a class="headerlink" href="#comap.mapper.CoMap.map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Representing an aggregated “System Effects” graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>networkX DiGraph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="comap.mapper.CoMap.name">
+<code class="sig-name descname">name</code><a class="headerlink" href="#comap.mapper.CoMap.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name to tag aggregated “System Effects” graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="comap.mapper.CoMap.grap_deltas">
+<code class="sig-name descname">grap_deltas</code><a class="headerlink" href="#comap.mapper.CoMap.grap_deltas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary holding the deltas between original and relabelled constitutents of aggregated graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="comap.mapper.CoMap.node_labels">
+<code class="sig-name descname">node_labels</code><a class="headerlink" href="#comap.mapper.CoMap.node_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary mapping node numbers to labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="comap.mapper.CoMap.node_colors">
+<code class="sig-name descname">node_colors</code><a class="headerlink" href="#comap.mapper.CoMap.node_colors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary mapping node numbers to colors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="comap.mapper.CoMap.synmap">
+<code class="sig-name descname">synmap</code><a class="headerlink" href="#comap.mapper.CoMap.synmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grap representing a synthetic version of map.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>network DiGraph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="comap.mapper.CoMap.set_deltas">
+<code class="sig-name descname">set_deltas</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">deltas</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/mapper.html#CoMap.set_deltas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#comap.mapper.CoMap.set_deltas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setter function for deltas.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="comap.mapper.CoMap.aggregate_maps">
+<code class="sig-name descname">aggregate_maps</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">G</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">node_tags</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/mapper.html#CoMap.aggregate_maps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#comap.mapper.CoMap.aggregate_maps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aggregate list of networkX Graphs in list G and attach to aggregate to CoMap object map.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="comap.mapper.CoMap.map_properties">
+<code class="sig-name descname">map_properties</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sort_by</span><span class="o">=</span><span class="default_value">['Pagerank', 'Out_degree_wg']</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/mapper.html#CoMap.map_properties"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#comap.mapper.CoMap.map_properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute key properties of nodes in the aggregate map.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="comap.mapper.CoMap.get_n_highest_ranking_nodes">
+<code class="sig-name descname">get_n_highest_ranking_nodes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n</span></em>, <em class="sig-param"><span class="n">metrics</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">color_cells</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/mapper.html#CoMap.get_n_highest_ranking_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#comap.mapper.CoMap.get_n_highest_ranking_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the n nodes with the highest rank (highest value) in a given graph metric.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="comap.mapper.CoMap.plot_map">
+<code class="sig-name descname">plot_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">layout</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/mapper.html#CoMap.plot_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#comap.mapper.CoMap.plot_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot aggregated graph.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="comap.mapper.CoMap.plot_ego_map">
+<code class="sig-name descname">plot_ego_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">layout</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/mapper.html#CoMap.plot_ego_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#comap.mapper.CoMap.plot_ego_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot ego map of node n.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="comap.mapper.CoMap.plot_map_deltas">
+<code class="sig-name descname">plot_map_deltas</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/mapper.html#CoMap.plot_map_deltas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#comap.mapper.CoMap.plot_map_deltas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot map deltas.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="comap.mapper.CoMap.plot_quadrant_scatter">
+<code class="sig-name descname">plot_quadrant_scatter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skip</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/mapper.html#CoMap.plot_quadrant_scatter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#comap.mapper.CoMap.plot_quadrant_scatter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a “quadrant” scatter of nodes in aggregated graph along three node properties.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="comap.mapper.CoMap.generate_synthetic_graph">
+<code class="sig-name descname">generate_synthetic_graph</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">noise_scale</span><span class="o">=</span><span class="default_value">0.2</span></em>, <em class="sig-param"><span class="n">smear_func</span><span class="o">=</span><span class="default_value">'laplace'</span></em>, <em class="sig-param"><span class="n">top_k</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">plot</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/mapper.html#CoMap.generate_synthetic_graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#comap.mapper.CoMap.generate_synthetic_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a “synthetic” version of aggregated graph with similar statistical properties.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id0">
+<code class="sig-name descname">aggregate_maps</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">G</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">node_tags</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/mapper.html#CoMap.aggregate_maps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a list of DiGraphs and aggregates common edges between nodes to create an aggregate graph.
+Attach aggregate graph as an attribute to CoMap object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – List of DiGraps</p></li>
+<li><p><strong>node_tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – Dictionary mapping node numbers to labels, e.g {0:’A’,1:’cat’,2:’family’,…}</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id1">
+<code class="sig-name descname">generate_synthetic_graph</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">noise_scale</span><span class="o">=</span><span class="default_value">0.2</span></em>, <em class="sig-param"><span class="n">smear_func</span><span class="o">=</span><span class="default_value">'laplace'</span></em>, <em class="sig-param"><span class="n">top_k</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">plot</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/mapper.html#CoMap.generate_synthetic_graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a synthetic version of senstive CoMap graph.</p>
+<dl class="simple">
+<dt>noise_scale<span class="classifier">float</span></dt><dd><p>Noise parameter controlling the amount of noise to apply (default:0.2)</p>
+</dd>
+<dt>smear_func<span class="classifier">str</span></dt><dd><p>Noise function to apply smearing (default:’laplace’)</p>
+</dd>
+<dt>top_k<span class="classifier">int or float</span></dt><dd><p>Top k number (int) or fraction (float) of eigenvectors to use in the SVD-reconstruction of the matrix (default:0.5)</p>
+</dd>
+<dt>plot<span class="classifier">bool</span></dt><dd><p>If True, plot of graph perturbations is returned (default: True)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>S<span class="classifier">networkX DiGraph</span></dt><dd><p>Synthetic graph</p>
+</dd>
+<dt>A_diff<span class="classifier">numpy.matrix</span></dt><dd><p>Matrix capturing the sum perturbations performed on the input adjacency matrix.</p>
+</dd>
+<dt>degN_noise<span class="classifier">list</span></dt><dd><p>List of smearing perturbations to degree N&gt;1 nodes.</p>
+</dd>
+<dt>deg1_noise<span class="classifier">list</span></dt><dd><p>List of smearing perturbations to degree N=1 nodes.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id2">
+<code class="sig-name descname">get_n_highest_ranking_nodes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n</span></em>, <em class="sig-param"><span class="n">metrics</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">color_cells</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/mapper.html#CoMap.get_n_highest_ranking_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#id2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the n nodes with the highest rank (highest value) in a given graph metric.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of items to retrieve.</p></li>
+<li><p><strong>metrics</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – List of metrics to evaluate</p></li>
+<li><p><strong>color_cells</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Color code cells (default: True)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dataframe with index:rank, column:metric, cell: node</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id3">
+<code class="sig-name descname">map_properties</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sort_by</span><span class="o">=</span><span class="default_value">['Pagerank', 'Out_degree_wg']</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/mapper.html#CoMap.map_properties"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#id3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute key properties of nodes in the aggregate map.
+Returns a sorted pandas DataFrame with graph properties.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sort_by</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – List of properties to sort dataframe.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dataframe with a set of graph metrics computed for each node in the graph.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id4">
+<code class="sig-name descname">plot_ego_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">layout</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/mapper.html#CoMap.plot_ego_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#id4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot ego map of node n.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id5">
+<code class="sig-name descname">plot_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">layout</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/mapper.html#CoMap.plot_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#id5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot map.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id6">
+<code class="sig-name descname">plot_map_deltas</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/mapper.html#CoMap.plot_map_deltas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#id6" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot map deltas.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id7">
+<code class="sig-name descname">plot_quadrant_scatter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skip</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/mapper.html#CoMap.plot_quadrant_scatter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#id7" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot scatter of nodes along three node attributes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="id8">
+<code class="sig-name descname">set_deltas</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">deltas</span><span class="o">=</span><span class="default_value">{}</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/mapper.html#CoMap.set_deltas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#id8" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set graph deltas</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-comap.plot_utils">
+<span id="comap-plot-utils-module"></span><h2>comap.plot_utils module<a class="headerlink" href="#module-comap.plot_utils" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="comap.plot_utils.plot_comparative_importance">
+<code class="sig-prename descclassname">comap.plot_utils.</code><code class="sig-name descname">plot_comparative_importance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">G</span></em>, <em class="sig-param"><span class="n">var</span><span class="o">=</span><span class="default_value">'Eigenvector_centrality'</span></em>, <em class="sig-param"><span class="n">col</span><span class="o">=</span><span class="default_value">('orange', 'skyblue')</span></em>, <em class="sig-param"><span class="n">compare_rank</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">excl</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/plot_utils.html#plot_comparative_importance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#comap.plot_utils.plot_comparative_importance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a lollipop plot of the difference between graph G_a and graph G_b in a user provided node property.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> (<em>tuple of CoMap objects</em>) – Tuple of two CoMap graphs to compare (e.g. (G_a, G_b))</p></li>
+<li><p><strong>var</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Node property (Default: ‘Eigenvector_centrality’)</p></li>
+<li><p><strong>col</strong> (<em>tuple of str</em>) – Colors for G_a and G_b (default: (‘orange’,’skyblue’))</p></li>
+<li><p><strong>compare_rank</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Compare relative difference in rank of ‘var’ rather than difference in value (default: False)</p></li>
+<li><p><strong>excl</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – List of strings referring to nodes to exclude from plot.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A lollipop graph showing the relative difference in ‘var’ between graphs in tuple G.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matplotlib figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="comap.plot_utils.plot_ego_map">
+<code class="sig-prename descclassname">comap.plot_utils.</code><code class="sig-name descname">plot_ego_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">G</span></em>, <em class="sig-param"><span class="n">n</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">layout</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/plot_utils.html#plot_ego_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#comap.plot_utils.plot_ego_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to draw the ego network of node n.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> (<em>networkx graph</em>) – Networkx graph containing node n</p></li>
+<li><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Node for which ego graph is drawn</p></li>
+<li><p><strong>direction</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – Specifies direction of ego network. Options: ‘incoming’ or ‘undirected’.
+If None, ‘outgoing’ ego-network is drawn</p></li>
+<li><p><strong>layout</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – Specifies networkX graph visualisation layout.
+If None, ‘shell_layout’ is used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Plot of the ego graph of node n.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matplotlib figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="comap.plot_utils.plot_graph_deltas">
+<code class="sig-prename descclassname">comap.plot_utils.</code><code class="sig-name descname">plot_graph_deltas</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">deltas</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/plot_utils.html#plot_graph_deltas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#comap.plot_utils.plot_graph_deltas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to plot histograms of graph deltas</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>deltas</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – Dictionary of grap deltas.</p></li>
+<li><p><strong>TODO</strong> (<em>example of dictionary</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Plot of histograms of graph deltas.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matplotlib figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="comap.plot_utils.plot_graph_perturbations">
+<code class="sig-prename descclassname">comap.plot_utils.</code><code class="sig-name descname">plot_graph_perturbations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">M</span></em>, <em class="sig-param"><span class="n">degN_noise</span></em>, <em class="sig-param"><span class="n">deg1_noise</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/plot_utils.html#plot_graph_perturbations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#comap.plot_utils.plot_graph_perturbations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to draw perturbations to adjacency matrix during synthesis</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>M</strong> (<em>numpy.matrix</em>) – Matrixx where each element represents a perturbation to the corresponding edge in the original adjacency matrix</p></li>
+<li><p><strong>degN_noise</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – List of noise added to adjancy matrix.</p></li>
+<li><p><strong>deg1_noise</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – List of noise added to degree-1 edges.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Figure showing perturbations to 1) adjacency matrix, 2) degree N&gt;1 nodes and 3) degree N==1 nodes</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matplotlib figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="comap.plot_utils.plot_map">
+<code class="sig-prename descclassname">comap.plot_utils.</code><code class="sig-name descname">plot_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">G</span></em>, <em class="sig-param"><span class="n">layout</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/plot_utils.html#plot_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#comap.plot_utils.plot_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw map using networkX’s draw functionality</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> (<em>networkx Graph</em>) – A networkx Graph to plot.</p></li>
+<li><p><strong>node_labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – Dictionary mapping node numbers to node labels.</p></li>
+<li><p><strong>layout</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Networkx graph layout (options: ‘circular_layout’,’random_layout’,’spring_layout’,’spectral_layout’).
+If None is provided, ‘shell_layout’ is used.
+usage: ‘layout=nx.spring_layout(G)’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A visualisation of graph G</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matplotlib figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="comap.plot_utils.quadrant_scatter">
+<code class="sig-prename descclassname">comap.plot_utils.</code><code class="sig-name descname">quadrant_scatter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">x</span><span class="o">=</span><span class="default_value">'Out_degree_wg'</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">'In_degree_wg'</span></em>, <em class="sig-param"><span class="n">z</span><span class="o">=</span><span class="default_value">'Pagerank'</span></em>, <em class="sig-param"><span class="n">skip</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">'Rank of'</span></em>, <em class="sig-param"><span class="n">divide_canvas</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">annotate</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/plot_utils.html#quadrant_scatter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#comap.plot_utils.quadrant_scatter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a scatter plot of graph nodes along node metrics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pandas DataFrame</em>) – Dataframe where index corresponds to node label and column are metrics.</p></li>
+<li><p><strong>x</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Variable (column) to plot on x-axis. (Default: ‘Out_degree_wg’)</p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Variable (column) to plot on y-axis. (Default: ‘In_degree_wg’)</p></li>
+<li><p><strong>z</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Variable (column) to plot on z-axes. (Default: ‘Pagerank’)</p></li>
+<li><p><strong>skip</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>, </em><em>optional</em>) – List of node labels that will not be included in scatter plot. (Default: None)</p></li>
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – Prefix to axis labels. Node labels are used as axis labels. (Default: ‘Rank of’)</p></li>
+<li><p><strong>divide_canvas</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Split canvas in two shaded regions. (Default: True)</p></li>
+<li><p><strong>annotate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Annotate scatter points with node labels. (Default: True)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Scatter plot (“bubble plot”) of graph nodes along desired node metrics.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matplotlib figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-comap.synth_utils">
+<span id="comap-synth-utils-module"></span><h2>comap.synth_utils module<a class="headerlink" href="#module-comap.synth_utils" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="comap.synth_utils.generate_synthetic_graph">
+<code class="sig-prename descclassname">comap.synth_utils.</code><code class="sig-name descname">generate_synthetic_graph</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">G</span></em>, <em class="sig-param"><span class="n">noise_scale</span><span class="o">=</span><span class="default_value">0.2</span></em>, <em class="sig-param"><span class="n">smear_func</span><span class="o">=</span><span class="default_value">'laplace'</span></em>, <em class="sig-param"><span class="n">top_k</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/comap/synth_utils.html#generate_synthetic_graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#comap.synth_utils.generate_synthetic_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a synthetic graph modelled on a raw graph. A synthetic graph is derived through a singular-value-decomposition
+of a randomly noised adjancency matrix. Noising targets low degree nodes disproportionately, so as to reduce the reidentification risk
+(and attribute disclosure risk?) of nodes in the aggregate map that can be traced back to only a small number of individual maps.</p>
+<dl class="simple">
+<dt>G<span class="classifier">networkx graph</span></dt><dd><p>Graph to synthesize.</p>
+</dd>
+<dt>noise_scale<span class="classifier">float</span></dt><dd><p>Controls how much noise is added to entries in the adjancency matrix. Defaults to the exponential decay parameter in a Laplace distribution.</p>
+</dd>
+<dt>smear_func<span class="classifier">string (optional)</span></dt><dd><p>Noise (“smearing”) function, either ‘laplace’ or ‘normal’ (default: ‘laplace’)</p>
+</dd>
+<dt>top_k<span class="classifier">int or float</span></dt><dd><p>top k number (int) or fraction (float) of eigenvectors to use in the SVD-reconstruction of the matrix</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>synmap<span class="classifier">networkx graph</span></dt><dd><p>A (laplace)-smeared, partially randomised and singular value decomposed networkX graph S, of the same type and with similar attributes as input graph G.</p>
+</dd>
+<dt>a_diff<span class="classifier">numpy matrix</span></dt><dd><p>Matrix capturing the sum perturbations performed on the input adjacency matrix (NB! Should never be released with synthetic map)</p>
+</dd>
+<dt>noise<span class="classifier">numpy array</span></dt><dd><p>Array containing random noise additions to input adjacency matrix before SVD-reconstruction (NB! should never be released with synthetic map)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-comap">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-comap" title="Permalink to this headline">¶</a></h2>
+<p>CoMa - ‘Complexity Mapping’ - a simple python package to support graph analysis with the ‘System Effects’ methodology.
+For reference to methodology, see: [paper]</p>
+<div class="section" id="main-features">
+<h3>Main features:<a class="headerlink" href="#main-features" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Plot graphs</p></li>
+<li><p>Extract key graph properties</p></li>
+<li><p>Generate synthetic aggregate graphs to preserve user privacy</p></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Daniel Johannessen, Phuong Nhu Nguyen, Robindra Prabhu
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

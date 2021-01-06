@@ -1,0 +1,331 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Synthetic graph generation &mdash; CoMap 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/jupyter-sphinx.css" type="text/css" />
+  <link rel="stylesheet" href="_static/thebelab.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/thebelab-helper.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Basic usage" href="usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> CoMap
+          
+
+          
+            
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Basic usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Synthetic graph generation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#method">Method</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-random-noise">Step 1: Random noise</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-reconstruct-a-low-rank-approximation">Step 2: Reconstruct a low-rank approximation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CoMap</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Synthetic graph generation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/synt.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="synthetic-graph-generation">
+<span id="synt"></span><h1>Synthetic graph generation<a class="headerlink" href="#synthetic-graph-generation" title="Permalink to this headline">¶</a></h1>
+<p>System Effects relies on mapping individual experiences. Insofar as the resulting graphs contain information that can be traced back to
+an identifiable person, the individual graphs are likely to qualify as <em>personal data</em> (<a class="reference external" href="https://gdpr.eu/eu-gdpr-personal-data/">https://gdpr.eu/eu-gdpr-personal-data/</a>) under
+EU’s General Data Protection Regulation (GDPR) <a class="footnote-reference brackets" href="#id3" id="id1">1</a>.</p>
+<p>Even if the individual graph has been stripped of all direct identifiers (e.g. names), the remaining nodes and edges may either alone
+or in conjunction with other elements in the graph reveal the identity of a participant to an “attacker” with sufficient background
+knowledge. Once the identity of a participant is revealed (“identity disclosure”), the attacker may use the graph and its relations to
+learn something new about the participant (“attribute disclosure”).</p>
+<p>The System Effects methodology inherently contains two steps of data processing that (perhaps inadvertently) serve to reduce this disclosure risk:</p>
+<p>1) Firstly, re-categorising raw nodes into standard categories ammenable to aggregation will typically distort the raw graph and result
+in a “simpler” re-categorised graph (e.g. when two “raw” nodes and their edges are merged into a common node, this may be considered a form
+of microaggregation with some information loss).
+2) Secondly, re-categorised individual maps are aggregated, thereby making it harder for an attacker to extract the individual graph
+pattern for an individual in the aggregate ensemble.</p>
+<p>While aggregation may go a long way towards securing the confidentiality of participant maps, there are cases where it may fall short:</p>
+<p>An aggregate ensemble preserves confidentiality essentially when a sufficiently large number of partipants “fall behind” each node
+and edge. Moreover, aggregates built from simple graphs, with few nodes and edges, drawn by e.g. 50 participants, are likely to preserve
+confidentialy better than more complex graphs, with many nodes and many edges, drawn by the same 50 participants. More nodes and edges
+open up for more permutations on which participants must distribute. In summary, confidentiality “increases” with the number of
+participants and “decreases” with graph complexity.</p>
+<p>In practice, any aggregate ensemble will likely have some nodes and edges in the “fringes” which only a small number of participants have
+identified. These will typically have low weight and consequently present a higher risk of disclosure.</p>
+<p>In order reduce the risk of the aggregate ensemble inadvertently leaking information from participant maps, CoMap implements a procedure
+to generate a “synthetic” aggregate ensemble, modelled on the original aggregate in such a way that key macrostatistical properties of
+the graph are preserved <a class="footnote-reference brackets" href="#id4" id="id2">2</a></p>
+<p>Firstly randomised noise is selectively applied to the aggregate adjacency matrix and secondly singular value decomposition is applied
+to the noised adjacency matrix to reconstruct a low-rank approximate graph.</p>
+<div class="section" id="method">
+<h2>Method<a class="headerlink" href="#method" title="Permalink to this headline">¶</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(A\)</span> represent the adjacency matrix of the original aggregate ensemble <span class="math notranslate nohighlight">\(G(\mathbf{n},\mathbf{e})\)</span> where <span class="math notranslate nohighlight">\(\mathbf{n}\)</span>
+is the set of nodes and <span class="math notranslate nohighlight">\(\mathfrak{e}\)</span> is set of edges.</p>
+<p>In order to generate a synthetic approximation <span class="math notranslate nohighlight">\(S\)</span>, the adjacency matrix <span class="math notranslate nohighlight">\(A\)</span> undergoes a two-step procedure, whereby random
+noise is firstly selectively applied to its entries before a low-rank approximation is reconstructed through singular value decomposition
+(SVD):</p>
+<div class="math notranslate nohighlight">
+\[G(\mathbf{n},\mathbf{e})\xrightarrow[\text{random noise}]{\text{step 1}} G^{´}(\mathbf{n},\mathbf{e^{'}})\xrightarrow[\text{SVD}]{\text{step 2}} S^{´}(\mathbf{n},\mathbf{e})\]</div>
+<div class="section" id="step-1-random-noise">
+<h3>Step 1: Random noise<a class="headerlink" href="#step-1-random-noise" title="Permalink to this headline">¶</a></h3>
+<p>All non-zero elements <span class="math notranslate nohighlight">\(a_{ij}\)</span> of the adjacency matrix <span class="math notranslate nohighlight">\(A\)</span> are perturbed. (A zero entry in the adjacency matrix corresponds
+to the absence of an edge in the aggregate ensemble and as such, unlike low non-zero values, does not disclose information from
+participant maps. It is however possible, that the absence of a node or an edge in some cases may reveal to an attacker whether or not
+a participant has contributed to the aggregate ensemble. Perturbing zero-elements was found to significantly distort the statistical
+properties of the resulting synthetic aggregate ensemble, and is therefore not handled here.)</p>
+<p>Nodes with in- or outdegree equal to 1 correspond to single respondents and as such “high risk”. These entries are therefore treated
+separately:</p>
+<ul class="simple">
+<li><p>First a list of 4 arbitrary weights from the set <span class="math notranslate nohighlight">\({1,2,..,10}\)</span> is drawn</p></li>
+<li><p>Secondly the randomly sampled weights are passed to a Dirichlet distribution generator which is used to sample</p></li>
+</ul>
+<p>edge perturbations:</p>
+<div class="math notranslate nohighlight">
+\[a_{ij}^{´} = a_{ij} * \mathcal{N_{D}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathcal{N_{D}}\)</span> is a Dirichlet random draw from the set <span class="math notranslate nohighlight">\({1,2,..,5}\)</span></p>
+<p>All edges related to nodes with in- or outdegree equal to 1, have fluctuated to weights between 1 and 5.</p>
+<p>In a second step, all non-zero elements <span class="math notranslate nohighlight">\(a_{ij}\)</span> of the adjacency matrix <span class="math notranslate nohighlight">\(A\)</span> are randomly “smeared” by a Laplace noising
+function <span class="math notranslate nohighlight">\(\mathcal{L}\)</span> centered on zero:</p>
+<div class="math notranslate nohighlight">
+\[a_{ij}^{´} = a_{ij} + \mathcal{L}(a_{ij})\]</div>
+<p>All non-zero entries in the adjancency matrix <span class="math notranslate nohighlight">\(A\)</span> are thus subject to random perturbation. Nodes
+with in- or outdegree equal to 1, have undergone two independent steps of random perturbation, making it
+difficult for an attacker to know if correspond to an single respondent or if they are the result of
+randomised fluctuations. As such the respondent is afforded some degree of “plausible deniability”.
+TODO: formalise protection</p>
+</div>
+<div class="section" id="step-2-reconstruct-a-low-rank-approximation">
+<h3>Step 2: Reconstruct a low-rank approximation<a class="headerlink" href="#step-2-reconstruct-a-low-rank-approximation" title="Permalink to this headline">¶</a></h3>
+<p>The synthetic graph ensemble is constructed from the adjacency matrix <span class="math notranslate nohighlight">\(S\)</span>, defined as an <span class="math notranslate nohighlight">\(k^{th}\)</span>-rank approximation of the noised adjacency matrix <span class="math notranslate nohighlight">\(A^{´}\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[S = U_k \Sigma_k V_k\]</div>
+<p>where <span class="math notranslate nohighlight">\(A^{´} = U \Sigma V\)</span>.</p>
+</div>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">comap.mapper</span> <span class="kn">import</span> <span class="n">CoMap</span>
+
+<span class="c1"># create 80 random participant graphs</span>
+<span class="n">participant_maps</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">50</span><span class="p">):</span>
+  <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">)</span>
+  <span class="n">m</span> <span class="o">=</span> <span class="n">n</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+  <span class="n">m</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">gnm_random_graph</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="k">for</span> <span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+      <span class="n">m</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">v</span><span class="p">][</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">participant_maps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+<span class="c1"># create an aggregate ensemble from maps and categories</span>
+<span class="n">G_agg</span> <span class="o">=</span> <span class="n">CoMap</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;raw_aggregate&#39;</span><span class="p">)</span>
+<span class="n">G_agg</span><span class="o">.</span><span class="n">aggregate_maps</span><span class="p">(</span> <span class="n">participant_maps</span> <span class="p">)</span>
+
+<span class="c1"># create a synthetic ensemble S_agg modelled on G_agg</span>
+<span class="n">S_agg</span><span class="p">,</span> <span class="n">m_diff</span><span class="p">,</span> <span class="n">degN_noise</span><span class="p">,</span> <span class="n">deg1_noise</span> <span class="o">=</span> <span class="n">G_agg</span><span class="o">.</span><span class="n">generate_synthetic_graph</span><span class="p">(</span> <span class="n">noise_scale</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">smear_func</span><span class="o">=</span><span class="s1">&#39;laplace&#39;</span><span class="p">)</span>
+
+
+<span class="c1"># plot synthetic ensemble</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">S_agg</span><span class="o">.</span><span class="n">plot_map</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="footnote brackets">
+<dt class="label" id="id3"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>This method is experimental and may not meet formal legal requirements of anonymisation.</p>
+</dd>
+<dt class="label" id="id4"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dd><p>Caveat: Only verified on a single aggregate, albeit with different parameters.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="usage.html" class="btn btn-neutral float-left" title="Basic usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Daniel Johannessen, Phuong Nhu Nguyen, Robindra Prabhu
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
