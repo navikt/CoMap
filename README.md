@@ -1,8 +1,8 @@
 CoMap
 ================
 
-This python package provides key utilities to support graph analyses of data 
-within the framework of the System Effects methodology, such as graph relabelling, 
+This python package provides key utilities to support graph analyses within the 
+framework of the System Effects methodology, such as graph relabelling, 
 graph aggregation, graph analysis tools and tools to minimize the potential leakage 
 of private information in aggregate graphs.
 
@@ -14,7 +14,7 @@ cognitive mapping and graph theory, it aims to capture the varied nature
 of the individual experience to enable better intervention design. For more information,
 the reader is referred to 
 
-Luke K. Craven (2017) System Effects: A Hybrid Methodology for Exploring the Determinants of Food In/Security, Annals of the American Association of Geographers, 107:5, 1011-1027, DOI: 10.1080/24694452.2017.1309965
+Luke K. Craven (2017) [System Effects: A Hybrid Methodology for Exploring the Determinants of Food In/Security](https://www.tandfonline.com/doi/full/10.1080/24694452.2017.1309965), Annals of the American Association of Geographers, 107:5, 1011-1027, DOI: 10.1080/24694452.2017.1309965
 
 # Quick start
 
