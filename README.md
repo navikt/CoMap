@@ -6,16 +6,13 @@ within the framework of the System Effects methodology, such as graph relabellin
 graph aggregation, graph analysis tools and tools to minimize the potential leakage 
 of private information in aggregate graphs.
 
+The full docs are found [here](https://navikt.github.io/comap/).
 
 **System Effects** is a research methodology to explore the 'user' or citizen 
 experience of complex phenomena. Drawing on soft systems, fuzzy
 cognitive mapping and graph theory, it aims to capture the varied nature 
-of the individual experience to enable better intervention design.
-
-
-The full docs are found [here](https://navikt.github.io/comap/).
-
-## More information
+of the individual experience to enable better intervention design. For more information,
+the reader is referred to 
 
 Luke K. Craven (2017) System Effects: A Hybrid Methodology for Exploring the Determinants of Food In/Security, Annals of the American Association of Geographers, 107:5, 1011-1027, DOI: 10.1080/24694452.2017.1309965
 
