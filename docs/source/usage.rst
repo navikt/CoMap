@@ -94,7 +94,9 @@ also provided:
 .. jupyter-execute::
 
   import sys
-  sys.path.append('/Users/rprabhu/Ana/SystemEffects/comap/')
+  import os
+  sys.path.insert(0, os.path.abspath('../../comap/'))
+  #sys.path.append('/Users/rprabhu/Ana/SystemEffects/comap/')
   import numpy as np
   import networkx as nx
 
